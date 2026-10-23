@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field-Topology Astrometry (FTA) &bull; Barycentric Invariant Engine &amp; Master Treatise</title>
+  <!-- Inline SVG Favicon with River-Stone & Campfire Flame Motifs -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a0f'/%3E%3Cpath d='M16 4C16 4 24 12 24 19C24 23.4 20.4 27 16 27C11.6 27 8 23.4 8 19C8 12 16 4 16 4Z' fill='%23ff5414'/%3E%3Cpath d='M16 9C16 9 21 14.5 21 19C21 21.8 18.8 24 16 24C13.2 24 11 21.8 11 19C11 14.5 16 9 16 9Z' fill='%23fbb034'/%3E%3Ccircle cx='16' cy='19' r='2.5' fill='%23ffffff'/%3E%3Ccircle cx='24' cy='8' r='1.5' fill='%2338bdf8'/%3E%3C/svg%3E">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Cinzel', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            hud: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            stone: {
+              void: '#05070a',       // Deepest abyss
+              abyss: '#090d14',      // River rock twilight shadow
+              slate: '#111723',      // Wet mountain boulder
+              border: '#1e293b',     // Cold stone contour
+              muted: '#64748b',      // Riverbed gravel gray
+            },
+            fire: {
+              ember: '#ff5414',      // Intense flame core
+              blaze: '#ff7a1a',      // Primary campfire glow
+              gold: '#fbb034',       // White-hot flame tip / spark
+              plasma: '#ff2a00',     // Energetic plasma conduit
+              ash: '#1a1412',        // Charred wood shadow
+            },
+            river: {
+              deep: '#0369a1',       // Mountain creek depth
+              flow: '#0ea5e9',       // Cold crystal water current
+              frost: '#7dd3fc',      // Whitewater spray
+              hyper: '#38bdf8',      // Luminescent alien telemetry
+              mist: '#94a3b8',       // Twilight gorge smoke
+            }
+          },
+          boxShadow: {
+            'flame': '0 0 30px -4px rgba(255, 84, 20, 0.45)',
+            'river': '0 0 30px -4px rgba(14, 165, 233, 0.45)',
+            'ember': '0 0 25px 2px rgba(251, 176, 52, 0.55)',
+            'alien': '0 0 50px rgba(56, 189, 248, 0.25), inset 0 0 20px rgba(255, 84, 20, 0.15)',
+          },
+          animation: {
+            'spin-slow': 'spin 24s linear infinite',
+            'spin-reverse': 'spin-rev 18s linear infinite',
+            'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+            'hud-sweep': 'hud-sweep 4s ease-in-out infinite',
+            'scanline': 'scanline 8s linear infinite',
+          },
+          keyframes: {
+            'spin-rev': {
+              '0%': { transform: 'rotate(360deg)' },
+              '100%': { transform: 'rotate(0deg)' },
+            },
+            'pulse-glow': {
+              '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 8px rgba(255,84,20,0.6))' },
+              '50%': { opacity: '1', filter: 'drop-shadow(0 0 22px rgba(251,176,52,0.9))' },
+            },
+            'hud-sweep': {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(100%)' },
+            },
+            'scanline': {
+              '0%': { backgroundPosition: '0 0' },
+              '100%': { backgroundPosition: '0 100%' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Technical Alien Grid & Reticle Overlay */
+    .alien-grid {
+      background-size: 28px 28px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    }
+
+    .alien-scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+
+    .hologram-glow {
+      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6)) drop-shadow(0 0 25px rgba(255, 84, 20, 0.35));
+    }
+
+    .flame-glow {
+      filter: drop-shadow(0 0 14px rgba(255, 84, 20, 0.7));
+    }
+
+    /* SVG Keyframe Animations for Diagrams */
+    @keyframes pulseDash {
+      to {
+        stroke-dashoffset: -40;
+      }
+    }
+    .anim-dash {
+      stroke-dasharray: 6 4;
+      animation: pulseDash 2s linear infinite;
+    }
+    .anim-dash-fast {
+      stroke-dasharray: 8 4;
+      animation: pulseDash 1s linear infinite;
+    }
+    .anim-dash-rev {
+      stroke-dasharray: 5 3;
+      animation: pulseDash 2.5s linear infinite reverse;
+    }
+
+    @keyframes radarSweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .anim-sweep {
+      transform-origin: center;
+      animation: radarSweep 6s linear infinite;
+    }
+    .anim-sweep-fast {
+      transform-origin: center;
+      animation: radarSweep 3s linear infinite;
+    }
+
+    @keyframes beaconPulse {
+      0%, 100% { r: 3; opacity: 0.9; }
+      50% { r: 8; opacity: 0.3; }
+    }
+    .anim-beacon {
+      animation: beaconPulse 2s ease-in-out infinite;
+    }
+
+    /* Print & Publication Dossier Formatting */
+    @page {
+      size: A4 portrait;
+      margin: 12mm 14mm;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #0c111a !important;
+        font-size: 9.5pt;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-page {
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        break-after: page !important;
+        min-height: 272mm !important;
+        height: auto !important;
+        padding: 6mm 0 !important;
+        background: #ffffff !important;
+        color: #0c111a !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+      .print-page:last-child {
+        page-break-after: auto !important;
+        border-bottom: none !important;
+      }
+      .print-card {
+        background-color: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+      }
+      text {
+        fill: #0c111a !important;
+      }
+      line, circle, path, rect {
+        stroke-opacity: 1 !important;
+      }
+    }
+
+    /* Sleek Alien Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #05070a; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ff5414; }
+  </style>
+</head>
+<body class="bg-stone-void text-slate-200 antialiased font-sans min-h-screen selection:bg-fire-ember/40 selection:text-fire-gold relative overflow-x-hidden">
+
+  <!-- ================= AMBIENT HYPERSPATIAL SPARKS & RIVER MIST CANVAS ================= -->
+  <canvas id="ambientSparksCanvas" class="no-print fixed inset-0 pointer-events-none z-0 opacity-50"></canvas>
+  <div class="no-print fixed inset-0 pointer-events-none z-0 alien-scanlines opacity-40"></div>
+
+  <!-- ================= TOP OBSERVATORY HUD HEADER ================= -->
+  <header class="no-print sticky top-0 z-50 bg-stone-void/90 backdrop-blur-2xl border-b border-stone-border/80 px-4 py-3 shadow-alien">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Alien Instrument Emblem & Title -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-stone-slate via-stone-void to-fire-ember/40 flex items-center justify-center border border-fire-ember/60 shadow-flame relative group overflow-hidden">
+          <!-- Animated rotating reticle inside emblem -->
+          <svg class="absolute inset-0 w-full h-full text-river-flow/30 anim-sweep" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4"/>
+          </svg>
+          <svg class="w-7 h-7 text-fire-gold flame-glow transition-transform duration-500 group-hover:scale-110 relative z-10" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C12 2 18 8 18 14C18 17.3 15.3 20 12 20C8.7 20 6 17.3 6 14C6 8 12 2 12 2Z" fill="url(#flameGradHeader)" />
+            <circle cx="12" cy="14" r="3.2" fill="#ffffff" />
+            <path d="M4 21C8 19 16 19 20 21" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="flameGradHeader" x1="12" y1="2" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fbb034"/>
+                <stop offset="0.5" stop-color="#ff5414"/>
+                <stop offset="1" stop-color="#991b1b"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-river-hyper rounded-full border-2 border-stone-void animate-ping"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif text-base sm:text-lg font-bold tracking-wider text-white flex items-center gap-2">
+              FIELD-TOPOLOGY ASTROMETRY
+              <span class="inline-block w-2 h-2 rounded-full bg-fire-ember animate-pulse"></span>
+            </h1>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-fire-ember/20 text-fire-gold border border-fire-ember/40 font-bold uppercase tracking-widest hidden sm:inline-block">
+              RELATIVISTIC TENSOR v4.0
+            </span>
+          </div>
+          <p class="text-[11px] text-stone-muted font-mono flex items-center gap-2">
+            <span class="text-river-frost">RADIAL COORDINATE: BARYCENTRIC 3D</span>
+            <span class="text-stone-border">&bull;</span>
+            <span class="text-fire-gold/90">INCEPTION MATRIX ACTIVATED</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Button Group -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="#dossierMasterSection" class="px-3 py-1.5 text-xs font-mono font-semibold bg-stone-slate/80 hover:bg-stone-slate border border-stone-border text-slate-300 hover:text-white rounded-lg transition active:scale-95 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-fire-gold animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          Treatise (10 Ch.)
+        </a>
+
+        <button onclick="shareActiveProfile()" class="px-3 py-1.5 text-xs font-mono font-semibold bg-stone-slate hover:bg-stone-border border border-fire-ember/50 text-fire-gold rounded-lg transition active:scale-95 shadow-sm hover:shadow-flame flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-fire-blaze" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          Share Vector
+        </button>
+
+        <button onclick="openCompareModal()" class="px-3 py-1.5 text-xs font-mono font-semibold bg-stone-slate hover:bg-stone-border border border-river-flow/50 text-river-frost rounded-lg transition active:scale-95 shadow-sm hover:shadow-river flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-river-flow animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          Wave Collision
+        </button>
+
+        <button onclick="exportTelemetryJSON()" class="px-3 py-1.5 text-xs font-mono bg-stone-slate hover:bg-stone-border border border-stone-border text-slate-300 hover:text-white rounded-lg transition active:scale-95 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-fire-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          JSON
+        </button>
+
+        <button onclick="window.print()" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-gradient-to-r from-fire-ember via-fire-blaze to-fire-gold text-stone-void rounded-lg hover:brightness-110 transition-all active:scale-95 shadow-flame flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print Monograph
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= INCOMING SHARE INVITATION BANNER ================= -->
+  <div id="shareBanner" class="no-print max-w-7xl mx-auto px-4 pt-4 hidden z-10 relative">
+    <div class="bg-gradient-to-r from-fire-ash via-stone-slate to-stone-abyss border border-fire-ember/60 rounded-2xl p-4 shadow-flame flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <span class="w-3.5 h-3.5 rounded-full bg-fire-ember animate-ping"></span>
+        <div class="text-xs">
+          <span class="font-mono text-fire-gold uppercase tracking-widest block text-[10px] font-bold">Alien Telemetry Ingestion Node</span>
+          <span class="text-white font-medium">Viewing real-time physical astrometry profile for <strong id="bannerTargetName" class="text-fire-gold font-serif">Bala Danmeri</strong></span>
+        </div>
+      </div>
+      <button onclick="promptReciprocalCompare()" class="px-4 py-2 text-xs font-mono font-bold bg-gradient-to-r from-river-flow to-river-frost text-stone-void rounded-xl hover:brightness-110 transition shadow-river">
+        Compute Wave Collision Interference &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= INCEPTION INPUT DOCK ================= -->
+  <section class="no-print max-w-7xl mx-auto px-4 py-6 z-10 relative">
+    <div class="bg-stone-abyss/95 border border-stone-border rounded-2xl p-6 shadow-2xl relative overflow-hidden alien-grid">
+      <!-- Ambient alien gradient orbs -->
+      <div class="absolute -right-20 -top-20 w-72 h-72 bg-fire-ember/15 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+      <div class="absolute -left-20 -bottom-20 w-72 h-72 bg-river-flow/15 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 1.5s;"></div>
+
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 mb-5 border-b border-stone-border pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-fire-gold animate-ping"></span>
+            <h2 class="text-xs font-mono uppercase tracking-widest text-fire-gold font-bold">Physical Inception Vector Telemetry</h2>
+          </div>
+          <p class="text-xs text-stone-muted mt-0.5">Calculates 3D heliocentric orbital coordinates, nocturnal Earth mass shielding, and geomagnetic electrojet geometry.</p>
+        </div>
+
+        <!-- Presets -->
+        <div class="flex items-center gap-2 text-xs font-mono">
+          <span class="text-stone-muted">Target Presets:</span>
+          <button type="button" onclick="loadPreset('bala')" class="px-3 py-1 rounded-lg bg-stone-slate border border-fire-ember/60 text-fire-gold hover:bg-stone-slate/80 transition flex items-center gap-1.5 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-fire-ember animate-pulse"></span>
+            Minna Inception (Bala Danmeri)
+          </button>
+          <button type="button" onclick="loadPreset('equinox')" class="px-3 py-1 rounded-lg bg-stone-slate border border-stone-border text-river-frost hover:border-river-flow transition">
+            London Solar Max
+          </button>
+        </div>
+      </div>
+
+      <form id="calcForm" onsubmit="event.preventDefault(); recalculateFTA();" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
+        <!-- Subject Identity -->
+        <div class="lg:col-span-3">
+          <label class="block text-[11px] font-mono uppercase text-stone-muted mb-1 font-semibold">Subject Identifier</label>
+          <input type="text" id="inputName" value="Bala Danmeri" required class="w-full bg-stone-void border border-stone-border focus:border-fire-blaze rounded-xl px-3 py-2 text-sm text-white font-medium focus:outline-none transition">
+        </div>
+
+        <!-- Inception Date -->
+        <div class="lg:col-span-2">
+          <label class="block text-[11px] font-mono uppercase text-stone-muted mb-1 font-semibold">Temporal Date</label>
+          <input type="date" id="inputDate" value="1973-08-04" required class="w-full bg-stone-void border border-stone-border focus:border-fire-blaze rounded-xl px-3 py-2 text-sm text-white font-mono focus:outline-none transition">
+        </div>
+
+        <!-- Time (Local) + Time Unknown Toggle -->
+        <div class="lg:col-span-3">
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-[11px] font-mono uppercase text-stone-muted font-semibold">Local Time (24h)</label>
+            <label class="flex items-center gap-1.5 cursor-pointer text-[10px] font-mono text-river-frost select-none">
+              <input type="checkbox" id="chkUnknownTime" onchange="toggleUnknownTime(this.checked)" class="rounded bg-stone-void border-stone-border text-fire-ember focus:ring-0">
+              <span>Time Unknown?</span>
+            </label>
+          </div>
+          
+          <div id="timeInputWrapper" class="flex items-center gap-2">
+            <input type="time" id="inputTime" value="23:30" class="w-full bg-stone-void border border-stone-border focus:border-fire-blaze rounded-xl px-3 py-2 text-sm text-white font-mono focus:outline-none transition">
+          </div>
+
+          <!-- Quick Quadrant Picker for Unknown / Approximate times -->
+          <div id="approxTimeWrapper" class="hidden grid grid-cols-4 gap-1.5 mt-1 text-[9px] font-mono">
+            <button type="button" onclick="setApproxTime('06:00', 'Dawn / Morning')" class="p-1 rounded bg-stone-slate/80 hover:bg-stone-slate border border-stone-border text-stone-muted hover:text-white transition">Dawn</button>
+            <button type="button" onclick="setApproxTime('12:00', 'Solar Noon / Midday')" class="p-1 rounded bg-stone-slate/80 hover:bg-stone-slate border border-stone-border text-stone-muted hover:text-white transition">Noon</button>
+            <button type="button" onclick="setApproxTime('18:00', 'Dusk / Evening')" class="p-1 rounded bg-stone-slate/80 hover:bg-stone-slate border border-stone-border text-stone-muted hover:text-white transition">Dusk</button>
+            <button type="button" onclick="setApproxTime('00:00', 'Midnight / Night')" class="p-1 rounded bg-stone-slate/80 hover:bg-stone-slate border border-stone-border text-stone-muted hover:text-white transition">Night</button>
+          </div>
+          <div class="text-[9px] text-stone-muted font-mono mt-1" id="timeStateHint">Exact local time active (WAT / UTC+1)</div>
+        </div>
+
+        <!-- Geographic Search / City Autocomplete -->
+        <div class="lg:col-span-4 relative">
+          <label class="block text-[11px] font-mono uppercase text-stone-muted mb-1 font-semibold flex justify-between items-center">
+            <span>City or Region Born</span>
+            <span class="text-[9px] text-river-frost font-mono lowercase">auto-detects lat/lon</span>
+          </label>
+          <div class="relative">
+            <input type="text" id="inputCitySearch" value="Minna, Nigeria" placeholder="Search city (e.g. Minna, London, Lagos, New York...)" autocomplete="off" oninput="searchCities(this.value)" class="w-full bg-stone-void border border-stone-border focus:border-river-flow rounded-xl pl-8 pr-3 py-2 text-xs text-white font-mono focus:outline-none transition">
+            <svg class="w-3.5 h-3.5 text-stone-muted absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            
+            <!-- Custom City Results Dropdown -->
+            <div id="cityResultsDropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-stone-abyss/98 border border-stone-border rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto divide-y divide-stone-border/40 font-mono text-xs backdrop-blur-xl"></div>
+          </div>
+
+          <!-- Hidden / Collapsible Fine Coordinates -->
+          <div class="flex items-center justify-between text-[10px] text-stone-muted font-mono mt-1.5">
+            <span class="truncate text-river-frost" id="dispLocationLabel">Minna, Nigeria (Equatorial Shield &bull; 9.61&deg; N, 6.55&deg; E)</span>
+            <button type="button" onclick="toggleCoordInputs()" class="text-stone-muted hover:text-white underline ml-2 text-[9px] shrink-0">edit lat/lon</button>
+          </div>
+
+          <!-- Collapsible Manual Lat/Lon Box -->
+          <div id="manualCoordBox" class="hidden grid grid-cols-2 gap-2 mt-2 p-2 rounded-lg bg-stone-slate/50 border border-stone-border">
+            <div>
+              <label class="text-[9px] text-stone-muted block">Latitude (&deg;)</label>
+              <input type="number" step="0.01" id="inputLat" value="9.61" class="w-full bg-stone-void border border-stone-border rounded px-2 py-1 text-xs text-white font-mono">
+            </div>
+            <div>
+              <label class="text-[9px] text-stone-muted block">Longitude (&deg;)</label>
+              <input type="number" step="0.01" id="inputLon" value="6.55" class="w-full bg-stone-void border border-stone-border rounded px-2 py-1 text-xs text-white font-mono">
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Calculation -->
+        <div class="lg:col-span-12 flex justify-end pt-2 border-t border-stone-border/40">
+          <button type="submit" class="w-full sm:w-auto px-8 py-2.5 bg-gradient-to-r from-fire-ember via-fire-blaze to-fire-gold hover:brightness-110 text-stone-void font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition active:scale-95 shadow-flame flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6.364 1.636l-.707.707M20 12h-1m-1.636 6.364l-.707-.707M12 20v-1m-6.364-1.636l.707-.707M4 12h1m1.636-6.364l.707.707"/></svg>
+            Compute Physical Astrometry Matrix
+          </button>
+        </div>
+      </form>
+
+      <div id="copyAlert" class="text-center text-xs font-mono text-river-frost mt-2 opacity-0 transition-opacity duration-300">Target coordinate encoded and copied to clipboard!</div>
+    </div>
+  </section>
+
+  <!-- ================= MASTER OBSERVATORY VISUALIZERS ================= -->
+  <section class="no-print max-w-7xl mx-auto px-4 pb-10 space-y-8 z-10 relative">
+
+    <!-- Top Grid: Interactive 3D Barycenter Solar Visualizer + Night-Side Magnetotail Simulator -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Visualizer 1: Interactive 3D Barycentric Solar Invariant Model -->
+      <div class="lg:col-span-7 bg-stone-abyss/95 border border-stone-border rounded-2xl p-5 shadow-2xl flex flex-col justify-between alien-grid relative overflow-hidden">
+        
+        <div class="flex justify-between items-start mb-2 z-10">
+          <div>
+            <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+              3D Heliocentric Invariant Plane Simulator
+            </div>
+            <h3 class="font-serif text-lg text-white font-bold mt-0.5">Physical Spatial Coordinates vs. Solar Center of Mass</h3>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button onclick="toggleOrbitAnimation()" id="btnOrbitAnim" class="text-[10px] font-mono px-3 py-1 bg-stone-slate hover:bg-stone-border text-slate-200 border border-stone-border rounded-lg transition flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" id="animDot"></span>
+              Pause Orbit
+            </button>
+            <button onclick="resetCamera3D()" class="text-[10px] font-mono px-2.5 py-1 bg-stone-slate hover:bg-stone-border text-stone-muted hover:text-white border border-stone-border rounded-lg transition" title="Reset Camera View">
+              Reset Camera
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Canvas Box with Alien Telemetry Reticles -->
+        <div class="relative w-full h-[400px] bg-stone-void rounded-xl border border-stone-border overflow-hidden cursor-grab active:cursor-grabbing flex items-center justify-center shadow-inner" id="canvas3dWrapper">
+          <canvas id="barycenterCanvas" class="w-full h-full block"></canvas>
+
+          <!-- Interactive Drag Controls Badge -->
+          <div class="absolute bottom-3 left-3 pointer-events-none text-[10px] font-mono text-river-frost bg-stone-void/90 px-3 py-1.5 rounded-lg border border-stone-border/80 backdrop-blur-md flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-river-flow animate-ping"></span>
+            Click &amp; Drag to Rotate 3D Axis &bull; Scroll to Zoom
+          </div>
+
+          <!-- Real-Time Astronomical Telemetry HUD with Futuristic Scanlines -->
+          <div class="absolute top-3 right-3 pointer-events-none text-[10px] font-mono text-right bg-stone-void/95 p-3 rounded-xl border border-stone-border/90 space-y-1.5 shadow-2xl backdrop-blur-md">
+            <div class="text-[9px] uppercase tracking-wider text-stone-muted font-bold flex items-center justify-end gap-1.5">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-fire-gold animate-pulse"></span>
+              RADIAL INCEPTION TELEMETRY
+            </div>
+            <div class="text-river-frost font-bold" id="hudEarthDist">Earth: 1.015 AU (Near Aphelion)</div>
+            <div class="text-stone-muted" id="hudVel">Velocity: 29.29 km/s (Annual Minimum)</div>
+            <div class="text-fire-gold" id="hudMars">Mars: 1.39 AU (Accelerating to Perihelion)</div>
+            <div class="text-fire-blaze font-semibold" id="hudShear">Jupiter-Saturn: 88.4&deg; Quadrupole Shear</div>
+          </div>
+        </div>
+
+        <!-- Plain-English Legend Bar -->
+        <div class="mt-3.5 pt-3 border-t border-stone-border flex flex-wrap justify-between items-center text-xs text-slate-300 gap-2">
+          <p class="text-[11px] text-stone-muted leading-relaxed max-w-xl">
+            <strong class="text-white">Relativistic Orbital Geometry:</strong> Earth is situated at aphelion (maximum distance from Sun), Mars is angled high above the solar invariant plane, and Jupiter and Saturn exert an orthogonal quadrupole shear across the system.
+          </p>
+          <span class="font-mono text-[10px] text-fire-gold bg-fire-ember/15 px-3 py-1 rounded-lg border border-fire-ember/40 font-semibold flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-fire-gold animate-ping"></span>
+            True 3D Spatial Vector Active
+          </span>
+        </div>
+      </div>
+
+      <!-- Visualizer 2: Earth Nocturnal Shield & Magnetospheric Tail Simulator -->
+      <div class="lg:col-span-5 bg-stone-abyss/95 border border-stone-border rounded-2xl p-5 shadow-2xl flex flex-col justify-between alien-grid relative overflow-hidden">
+        <div>
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <div class="text-[10px] font-mono uppercase tracking-widest text-river-frost font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-river-flow animate-pulse"></span>
+                Planetary Mass Shield &amp; Nocturnal Magnetotail
+              </div>
+              <h3 class="font-serif text-lg text-white font-bold mt-0.5">23:30 Midnight Quadrant</h3>
+            </div>
+            <span class="text-[10px] font-mono text-river-frost bg-stone-void border border-river-flow/40 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-river-hyper"></span>
+              M = 5.97 &times; 10<sup>24</sup> kg
+            </span>
+          </div>
+
+          <!-- Animated Canvas: Solar Wind & Night-Side Shadow -->
+          <div class="relative w-full h-[280px] bg-stone-void rounded-xl border border-stone-border overflow-hidden shadow-inner">
+            <canvas id="magnetoCanvas" class="w-full h-full block"></canvas>
+            <div class="absolute bottom-2.5 left-2.5 text-[10px] font-mono text-stone-muted bg-stone-void/90 px-2.5 py-1 rounded-md border border-stone-border/80 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-fire-gold animate-pulse"></span>
+              Interplanetary Solar Wind &rarr; Deep Magnetotail Corridor
+            </div>
+          </div>
+
+          <!-- Explanations with Alien Accents -->
+          <div class="mt-3.5 space-y-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-stone-slate/60 border border-stone-border">
+              <span class="font-mono text-river-frost font-bold block text-[11px] flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-river-flow animate-pulse"></span>
+                The Nocturnal Synthesis Node (Midnight Shield):
+              </span>
+              <p class="text-slate-300 text-[11px] mt-1 leading-relaxed">
+                At 23:30 (11:30 PM), Minna was positioned directly on Earth's anti-solar hemisphere. The solid 5.97 &times; 10<sup>24</sup> kg mass of the planet completely shadowed your biology from raw solar photon radiation, routing your inception through the calm, laminar magnetotail.
+              </p>
+            </div>
+            
+            <div class="p-3 rounded-xl bg-stone-slate/60 border border-stone-border">
+              <span class="font-mono text-fire-gold font-bold block text-[11px] flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-fire-ember animate-pulse"></span>
+                Equatorial Horizontal Field Lines (Minna, 9.61&deg; N):
+              </span>
+              <p class="text-slate-300 text-[11px] mt-1 leading-relaxed">
+                Near the magnetic equator, Earth's field lines run strictly horizontal to the crust (&plusmn;0.8&deg; dip), providing the cleanest, lowest-noise electromagnetic shielding on the planet and establishing an innate low-entropy cognitive baseline.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Visualizer 3: Gravitational Quadrupole Shear & Diurnal Wave Resonance Engine -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Quadrupole Gravitational Field Tensor -->
+      <div class="lg:col-span-5 bg-stone-abyss/95 border border-stone-border rounded-2xl p-5 shadow-2xl alien-grid flex flex-col justify-between">
+        <div>
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold font-bold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-fire-ember animate-ping"></span>
+                Gravitational Vector Tensor Field
+              </div>
+              <h3 class="font-serif text-base text-white font-bold mt-0.5">Jupiter-Saturn Quadrupole Tensor</h3>
+            </div>
+            <span class="text-[10px] font-mono text-fire-gold bg-fire-ash px-2.5 py-0.5 rounded-lg border border-fire-ember/40">
+              Angle: 88.4&deg;
+            </span>
+          </div>
+
+          <!-- Animated Quadrupole Canvas -->
+          <div class="relative w-full h-[190px] bg-stone-void rounded-xl border border-stone-border overflow-hidden shadow-inner">
+            <canvas id="quadrupoleCanvas" class="w-full h-full block"></canvas>
+          </div>
+
+          <div class="p-3 rounded-xl bg-stone-slate/60 border border-stone-border mt-3 text-xs">
+            <span class="font-mono text-fire-gold font-bold block text-[11px]">Orthogonal Gravitational Compression:</span>
+            <p class="text-slate-300 text-[11px] mt-0.5 leading-relaxed">
+              Jupiter and Saturn sat at right angles relative to the Sun, generating perpendicular gravitational shear lines that encourage deterministic, modular system building rather than loose speculation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diurnal Continuous Harmonic Oscillator Canvas -->
+      <div class="lg:col-span-7 bg-stone-abyss/95 border border-stone-border rounded-2xl p-5 shadow-2xl alien-grid flex flex-col justify-between">
+        <div>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2 pb-2 border-b border-stone-border">
+            <div>
+              <div class="text-[10px] font-mono uppercase tracking-widest text-river-frost font-bold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-river-flow animate-pulse"></span>
+                Continuous Phase-Space Oscillator
+              </div>
+              <h3 class="font-serif text-base text-white font-bold">Diurnal Focus, Architecture &amp; Synthesis Cadence</h3>
+            </div>
+            <div class="flex items-center gap-3 text-xs font-mono">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-river-frost animate-ping"></span> Ground State</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-fire-gold animate-pulse"></span> Kinetic Peak</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-fire-ember animate-pulse"></span> Synthesis Node</span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[190px] bg-stone-void rounded-xl border border-stone-border overflow-hidden shadow-inner">
+            <canvas id="diurnalWaveCanvas" class="w-full h-full block"></canvas>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3 text-xs">
+            <div class="p-2.5 bg-stone-slate/50 border border-stone-border rounded-xl">
+              <span class="font-mono text-river-frost font-bold block text-[10px] uppercase">06:00 &ndash; 09:30 &bull; Quiet Ground</span>
+              <p class="text-stone-muted text-[10px] mt-0.5">Solitary system architecture with zero acoustic clutter.</p>
+            </div>
+            <div class="p-2.5 bg-stone-slate/50 border border-stone-border rounded-xl">
+              <span class="font-mono text-fire-gold font-bold block text-[10px] uppercase">09:30 &ndash; 15:00 &bull; Kinetic Drive</span>
+              <p class="text-stone-muted text-[10px] mt-0.5">Mars perihelion drive fires. Modular execution and programming.</p>
+            </div>
+            <div class="p-2.5 bg-stone-slate/50 border border-stone-border rounded-xl">
+              <span class="font-mono text-fire-ember font-bold block text-[10px] uppercase">21:00 &ndash; 01:30 &bull; Nocturnal Peak</span>
+              <p class="text-stone-muted text-[10px] mt-0.5">Birth node alignment. Distillation and long-term folios.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= MASTER TREATISE CHAPTER NAVIGATION (Screen Only) ================= -->
+  <section class="no-print max-w-7xl mx-auto px-4 pb-6 z-10 relative" id="dossierMasterSection">
+    <div class="bg-stone-abyss/95 border border-stone-border rounded-2xl p-6 shadow-2xl alien-grid">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 border-b border-stone-border pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-fire-ember animate-ping"></span>
+            <span class="text-xs font-mono uppercase tracking-widest text-fire-gold font-bold">Commissioned Astrometric Monograph &bull; &pound;275 Archival Tier</span>
+          </div>
+          <h2 class="font-serif text-2xl font-bold text-white mt-1">Ten-Chapter Master Inception Treatise</h2>
+          <p class="text-xs text-stone-muted mt-0.5">Complete analytical epistemology, relativistic tensor calculations, biophysical calibration protocols, and temporal chronometry.</p>
+        </div>
+        <div class="text-xs font-mono text-right text-stone-muted">
+          <span class="text-river-frost font-bold block">10 Expansive Chapters</span>
+          <span>Archival Commission Reference: FTA-730804-MINNA-2330</span>
+        </div>
+      </div>
+
+      <!-- Quick Index Links with Hover Glow -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-[11px] font-mono">
+        <a href="#folio-01" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-gold group-hover:animate-ping"></span>
+          01. Epistemology &amp; Void
+        </a>
+        <a href="#folio-02" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-gold group-hover:animate-ping"></span>
+          02. 3D Barycenter Tensor
+        </a>
+        <a href="#folio-03" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-river-flow group-hover:animate-ping"></span>
+          03. Minna Magnetotail Shield
+        </a>
+        <a href="#folio-04" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-river-flow group-hover:animate-ping"></span>
+          04. Quadrupole Shear Dynamics
+        </a>
+        <a href="#folio-05" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-ember group-hover:animate-ping"></span>
+          05. State-6 Attractor Modes
+        </a>
+        <a href="#folio-06" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-ember group-hover:animate-ping"></span>
+          06. Stress-Strain Mechanics
+        </a>
+        <a href="#folio-07" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-river-frost group-hover:animate-ping"></span>
+          07. Orbital Chronometry (Age 53)
+        </a>
+        <a href="#folio-08" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-river-frost group-hover:animate-ping"></span>
+          08. Operational Playbook
+        </a>
+        <a href="#folio-09" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-gold group-hover:animate-ping"></span>
+          09. Relational Collision Matrix
+        </a>
+        <a href="#folio-10" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
+          <span class="w-1.5 h-1.5 rounded-full bg-fire-gold group-hover:animate-ping"></span>
+          10. Archival Certificate
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 10-CHAPTER COMPREHENSIVE PUBLICATION DOSSIER ================= -->
+  <!-- Every single chapter features rich, continuous futuristic vector animations -->
+  <main class="max-w-[210mm] mx-auto px-4 print:px-0 py-6 space-y-12 print:space-y-0 z-10 relative">
+
+    <!-- DOSSIER CHAPTER 1: Epistemological Foundations & The Babylonian Fallacy -->
+    <article id="folio-01" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="flex justify-between items-start border-b-2 border-stone-border pb-4 mb-6">
+        <div>
+          <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+            Field-Topology Astrometry &bull; Chapter 01/10
+          </div>
+          <h2 class="font-serif text-3xl font-extrabold text-white print:text-slate-900 mt-1" id="folioName">Bala Danmeri</h2>
+          <div class="text-xs font-mono text-stone-muted print:text-slate-600 mt-1" id="folioCoords">
+            Inception: 4 August 1973 &bull; 23:30 WAT (22:30 UTC) &bull; Minna, Nigeria (9.61&deg; N, 6.55&deg; E)
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="inline-block px-3 py-1 font-mono text-xs font-bold bg-fire-ember/20 text-fire-gold border border-fire-ember/40 rounded-xl print-card">
+            ATTRACTOR: STATE-6
+          </span>
+          <div class="text-[10px] font-mono text-stone-muted mt-1">INVARIANT SHEAR: +0.682</div>
+        </div>
+      </div>
+
+      <!-- Philosophical Epistemology -->
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-fire-ember pl-3">
+          I. The Epistemological Crisis of Classical Astrological Models
+        </h3>
+        
+        <p class="text-justify">
+          For over two millennia, human inquiry into celestial influence has been paralyzed by the <strong>Babylonian 2D Projection Fallacy</strong>. Traditional horoscopy assumes that the vast, three-dimensional gravitational well of our solar system can be compressed onto an imaginary two-dimensional circle of 360 degrees, divided arbitrarily into twelve equal thirty-degree pie slices named after constellations. This model suffers from three catastrophic scientific compromises:
+        </p>
+
+        <!-- Dynamic Animated Futuristic Hologram Schematic for Ch 1 -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 relative overflow-hidden">
+          <div class="flex justify-between items-center mb-2 font-mono text-[9px] text-stone-muted">
+            <span class="text-fire-gold uppercase font-bold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-fire-ember animate-ping"></span>
+              Figure 1.1: 2D Flat Circle Projection Breakdown vs. True 3D Barycentric Continuum
+            </span>
+            <span class="text-river-frost">DIMENSIONAL DEVIATION = 91.4%</span>
+          </div>
+          <svg viewBox="0 0 540 140" class="w-full h-auto max-h-[140px]">
+            <!-- Grid Lines -->
+            <line x1="20" y1="70" x2="520" y2="70" stroke="#1e293b" stroke-width="1" stroke-dasharray="2 4"/>
+            <line x1="270" y1="10" x2="270" y2="130" stroke="#1e293b" stroke-width="1" stroke-dasharray="2 4"/>
+            
+            <!-- Left: Flat 2D Babylonian Circle (Broken) -->
+            <g transform="translate(130, 70)">
+              <circle cx="0" cy="0" r="48" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="4 4"/>
+              <!-- Flat slice lines -->
+              <line x1="-48" y1="0" x2="48" y2="0" stroke="#475569" stroke-width="1"/>
+              <line x1="0" y1="-48" x2="0" y2="48" stroke="#475569" stroke-width="1"/>
+              <!-- Cross distortion indicator -->
+              <path d="M-30 -30 L 30 30 M -30 30 L 30 -30" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6"/>
+              <circle cx="0" cy="0" r="16" fill="rgba(239, 68, 68, 0.15)" stroke="#ef4444" stroke-width="1"/>
+              <text x="0" y="4" fill="#ef4444" font-size="8" font-family="monospace" text-anchor="middle">Flat 2D Myth</text>
+              <text x="0" y="60" fill="#94a3b8" font-size="8" font-family="monospace" text-anchor="middle">Information Loss &gt; 90%</text>
+            </g>
+
+            <!-- Middle: Transformation Bridge -->
+            <path d="M 215 70 L 305 70" stroke="#ff7a1a" stroke-width="2" marker-end="url(#arrowPulse)"/>
+            <text x="260" y="62" fill="#fbb034" font-size="8" font-family="monospace" text-anchor="middle">FTA Tensor Transform</text>
+
+            <!-- Right: 3D Barycentric Orbit Manifold (Animated Alien Tech Rings) -->
+            <g transform="translate(410, 70)">
+              <!-- Outer Rotating Hologram Ring -->
+              <ellipse cx="0" cy="0" rx="65" ry="24" fill="none" stroke="#0ea5e9" stroke-width="1.5" class="anim-dash"/>
+              <!-- Inner Counter-Rotating Ring -->
+              <ellipse cx="0" cy="0" rx="46" ry="38" fill="none" stroke="#fbb034" stroke-width="1" class="anim-dash-rev" transform="rotate(35)"/>
+              <!-- Invariant Plane Z-Axis Grid -->
+              <line x1="0" y1="-50" x2="0" y2="50" stroke="#38bdf8" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="8" fill="#ff5414" class="anim-beacon"/>
+              <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+              <!-- Orbiting Target Marker -->
+              <g class="anim-sweep">
+                <circle cx="50" cy="0" r="4" fill="#38bdf8"/>
+                <line x1="50" y1="0" x2="50" y2="20" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2 2"/>
+              </g>
+              <text x="0" y="60" fill="#38bdf8" font-size="8" font-family="monospace" text-anchor="middle">3D Barycentric State Matrix</text>
+            </g>
+
+            <defs>
+              <marker id="arrowPulse" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff7a1a"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
+          <div class="p-3.5 bg-stone-slate/60 print:bg-slate-100 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold font-bold block text-[11px] mb-1">1. The Geocentric Illusion</span>
+            <p class="text-[11px] text-stone-muted print:text-slate-600">Earth is not the center of gravity. Projecting heliocentric orbits onto a geocentric circle distorts true spatial velocity, distance vectors, and orbital mechanics.</p>
+          </div>
+          <div class="p-3.5 bg-stone-slate/60 print:bg-slate-100 border border-stone-border rounded-xl">
+            <span class="font-mono text-river-frost font-bold block text-[11px] mb-1">2. Axial Precession Drift</span>
+            <p class="text-[11px] text-stone-muted print:text-slate-600">Earth's rotational axis wobbles every 25,772 years. The constellations have shifted over 30 degrees from where Babylonian priests observed them, breaking tropical alignments.</p>
+          </div>
+          <div class="p-3.5 bg-stone-slate/60 print:bg-slate-100 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-ember font-bold block text-[11px] mb-1">3. Zero Depth / Z-Axis Blindness</span>
+            <p class="text-[11px] text-stone-muted print:text-slate-600">Planets do not share a single flat plane. Mars, Mercury, and Pluto tilt dramatically above and below the solar invariant plane, generating real 3D spatial forces.</p>
+          </div>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-river-flow pl-3 mt-6">
+          II. The First-Principles Postulate of Field-Topology Astrometry
+        </h3>
+        <p class="text-justify">
+          Field-Topology Astrometry (FTA) discards astrological mythology and re-grounds human inception in <strong>verifiable gravitational gradients, magnetospheric plasma physics, and 3D barycentric orbital vectors</strong>. When an organism takes its first breath, its expanding cellular matrix, nervous system, and blood electrolytes are exposed to Earth's ambient biophysical environment. That environment is not shaped by mythical gods, but by:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 text-stone-muted print:text-slate-600 text-[11px]">
+          <li><strong>The Heliocentric Gravitational Gradient Tensor:</strong> Earth's exact position on its eccentric elliptical orbit relative to the Sun and the Solar System Barycenter (SSB).</li>
+          <li><strong>Planetary Mass Shielding:</strong> The precise geometric angle at which the 5.97 &times; 10<sup>24</sup> kg solid sphere of Earth intercepts or buffers interplanetary coronal mass emissions.</li>
+          <li><strong>Geomagnetic Dip &amp; Induction:</strong> The exact geographic latitude and local magnetic vector through which solar wind particle streams are filtered into the crust.</li>
+        </ul>
+
+        <div class="p-4 bg-stone-slate/70 print:bg-slate-100 border border-fire-ember/30 rounded-xl mt-4">
+          <span class="font-mono text-fire-gold font-bold uppercase text-[10px] block mb-1">Executive Translation for Bala Danmeri</span>
+          <p class="text-[11px] text-slate-200 print:text-slate-800 leading-relaxed">
+            You are not an ambiguous &ldquo;Leo with Moon in Libra&rdquo; trapped in a newspaper horoscope. You are an <strong>Aphelion-Inertial, Midnight-Shielded Topological Attractor (State-6)</strong>. Every characteristic of your mind&mdash;your profound resistance to intellectual fads, your need for sovereign closed-loop architectures, and your exceptional ability to synthesize multi-variable systems late at night&mdash;is a direct physical consequence of your inception geometry.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 01 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 2: The 3D Heliocentric Barycenter & Aphelion Inertia -->
+    <article id="folio-02" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Physical Mechanics &bull; Chapter 02/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The 3D Heliocentric Barycenter &amp; Aphelion Structural Inertia</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          On 4 August 1973, Earth was located at <strong>1.015 Astronomical Units (AU)</strong> from the center of the Sun, having passed through its annual aphelion (maximum orbital distance) just weeks prior. In classical astrology, distance is ignored; in celestial mechanics and FTA, orbital distance is everything.
+        </p>
+
+        <!-- Technical Telemetry Matrix -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4 font-mono text-center">
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[9px] text-stone-muted uppercase font-bold">Heliocentric Radius (r)</div>
+            <div class="text-base font-bold text-river-frost print:text-blue-700 mt-0.5">1.015 AU</div>
+            <div class="text-[9px] text-stone-muted mt-0.5">151.8 Million km</div>
+          </div>
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[9px] text-stone-muted uppercase font-bold">Orbital Velocity (v)</div>
+            <div class="text-base font-bold text-fire-gold print:text-amber-700 mt-0.5">29.29 km/s</div>
+            <div class="text-[9px] text-stone-muted mt-0.5">Annual Minimum</div>
+          </div>
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[9px] text-stone-muted uppercase font-bold">Solar Barycenter Offset</div>
+            <div class="text-base font-bold text-river-flow print:text-blue-600 mt-0.5">1.12 R_sun</div>
+            <div class="text-[9px] text-stone-muted mt-0.5">Displaced Center</div>
+          </div>
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[9px] text-stone-muted uppercase font-bold">Inertial Coefficient</div>
+            <div class="text-base font-bold text-fire-blaze print:text-orange-700 mt-0.5">&lambda; = 0.984</div>
+            <div class="text-[9px] text-stone-muted mt-0.5">Peak Momentum Lock</div>
+          </div>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-fire-gold pl-3 mt-4">
+          The Cognitive &amp; Structural Manifestation of Aphelion Velocity
+        </h3>
+        <p class="text-justify">
+          By Kepler's Second Law of Planetary Motion, an orbiting body sweeps out equal areas in equal times. At aphelion, Earth moves at its <em>minimum orbital speed</em> (29.29 km/s compared to 30.29 km/s at perihelion in January). 
+        </p>
+        <p class="text-justify">
+          In FTA, individuals calibrated to an aphelion inception possess an innate <strong>High Structural Inertia Profile</strong>:
+        </p>
+
+        <div class="space-y-2.5 my-3 pl-2 border-l border-stone-border">
+          <div class="p-2.5 bg-stone-slate/40 print:bg-slate-50 rounded-lg">
+            <strong class="text-white print:text-slate-900 block font-mono text-[11px]">1. High Friction to Initiate &bull; Unstoppable Once Moving:</strong>
+            <span class="text-stone-muted print:text-slate-600 text-[11px]">You do not casually start fifty trivial hobbies or jump on fleeting trends. You require deliberate energetic investment to initiate a trajectory. However, once your architecture is set in motion, external opposition, skepticism, or market turbulence cannot derail it.</span>
+          </div>
+          <div class="p-2.5 bg-stone-slate/40 print:bg-slate-50 rounded-lg">
+            <strong class="text-white print:text-slate-900 block font-mono text-[11px]">2. Rejection of Ephemeral Hype:</strong>
+            <span class="text-stone-muted print:text-slate-600 text-[11px]">While perihelion-born systems react impulsively to social excitement, your nervous system processes high-frequency excitement as noise. You are naturally geared toward long-horizon durable structures that outlast seasonal cycles.</span>
+          </div>
+          <div class="p-2.5 bg-stone-slate/40 print:bg-slate-50 rounded-lg">
+            <strong class="text-white print:text-slate-900 block font-mono text-[11px]">3. Gravitational Field Autonomy:</strong>
+            <span class="text-stone-muted print:text-slate-600 text-[11px]">Because Earth is at its deepest point of sovereign isolation from the central solar furnace, you operate with an innate psychological independence. You do not seek validation from committees, hierarchies, or peer approval.</span>
+          </div>
+        </div>
+
+        <!-- Animated Alien Orbit Schematic: Aphelion Orbit Loop -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 2.1 &bull; HELIOCENTRIC ORBITAL VELOCITY TENSOR AT APHELION</span>
+            <span class="text-river-frost">v = 29.29 km/s [MINIMUM ORBITAL ACCELERATION]</span>
+          </div>
+          <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[135px]">
+            <!-- Orbit Path Ellipse with Animated Dash -->
+            <ellipse cx="260" cy="70" rx="220" ry="52" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+            <ellipse cx="260" cy="70" rx="220" ry="52" fill="none" stroke="#0ea5e9" stroke-width="1.5" class="anim-dash" opacity="0.7"/>
+
+            <!-- Gravitational Center Sun -->
+            <circle cx="210" cy="70" r="16" fill="url(#sunFlareMini)" class="anim-beacon"/>
+            <circle cx="210" cy="70" r="7" fill="#ffffff"/>
+            <text x="210" y="100" fill="#fbb034" font-size="9" font-family="monospace" text-anchor="middle">Solar Mass Core (SSB)</text>
+
+            <!-- Earth at Aphelion (Animated Pulsing Node) -->
+            <g transform="translate(480, 70)">
+              <!-- Radar crosshairs -->
+              <circle cx="0" cy="0" r="14" fill="none" stroke="#38bdf8" stroke-width="1" class="anim-dash-fast"/>
+              <circle cx="0" cy="0" r="6" fill="#0ea5e9"/>
+              <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+              <!-- Velocity vector arrow -->
+              <line x1="0" y1="0" x2="0" y2="-32" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowPulse)"/>
+              <text x="-12" y="-36" fill="#7dd3fc" font-size="8" font-family="monospace" font-weight="bold">v = 29.29 km/s</text>
+            </g>
+            <text x="475" y="100" fill="#7dd3fc" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Aphelion Inception (1.015 AU)</text>
+            <text x="475" y="112" fill="#94a3b8" font-size="8" font-family="monospace" text-anchor="middle">Maximum Inertia Coordinate</text>
+
+            <!-- Perihelion Opposite Point -->
+            <circle cx="40" cy="70" r="4.5" fill="#475569"/>
+            <text x="40" y="92" fill="#64748b" font-size="8" font-family="monospace" text-anchor="middle">Perihelion (0.983 AU)</text>
+            <text x="40" y="104" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle">30.29 km/s</text>
+
+            <defs>
+              <radialGradient id="sunFlareMini">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="40%" stop-color="#fbb034"/>
+                <stop offset="100%" stop-color="#ff5414"/>
+              </radialGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 02 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 3: Minna Magnetospheric Shield & Equatorial Electrojet -->
+    <article id="folio-03" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Geomagnetics &bull; Chapter 03/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Minna Geophysical Coordinate &amp; Equatorial Electrojet</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          No astrological reading is physically coherent without modeling the local planetary horizon and geomagnetic field line curvature. Minna, Nigeria (9.61&deg; N, 6.55&deg; E) is located within the unique atmospheric corridor known to geophysicists as the <strong>Equatorial Electrojet Zone</strong>.
+        </p>
+
+        <!-- Physics Analysis Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3">
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-river-frost font-bold block text-[11px] mb-1">Horizontal Geomagnetic Dip (&plusmn;0.8&deg;)</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+              At mid-latitudes (such as London or New York), Earth's magnetic lines plunge steeply into the ground at 65&deg; to 75&deg;, channeling energetic particle radiation downward. In Minna, the magnetic inclination is strictly <strong>horizontal</strong> (parallel to Earth's surface). This creates an exceptionally laminar electromagnetic shield with minimal vertical auroral disturbance.
+            </p>
+          </div>
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold font-bold block text-[11px] mb-1">Nocturnal Mass Shielding (23:30 WAT)</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+              At 11:30 PM, your inception point was facing directly away from the Sun into deep space. The entire <strong>5.97 &times; 10<sup>24</sup> kg solid silicate and iron core of Earth</strong> sat directly between you and raw solar wind flux. Your biology was exposed exclusively to the calm, elongated shadow of the <em>magnetotail</em>.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-river-flow pl-3 mt-4">
+          The Biophysical Imprint of the Midnight Shield
+        </h3>
+        <p class="text-justify">
+          Organisms initiated in high solar-exposure daytime windows are calibrated to outward, highly reactive, performative modes. Because your inception occurred behind the Earth's solid bulk in the deep midnight corridor, your neurological baseline was calibrated in a state of <strong>maximal electromagnetic silence</strong>:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-stone-muted print:text-slate-600 text-[11px]">
+          <li><strong>Innate Low-Noise Cognitive Floor:</strong> Your brain naturally filters out superficial environmental static. You perceive clear signal where others are overwhelmed by sensory overload.</li>
+          <li><strong>Nocturnal Synthesis Cycle:</strong> Your creative and strategic breakthroughs will consistently occur during solitary nighttime hours, when the local crust is turned away from the daytime electromagnetic grid.</li>
+          <li><strong>Intolerance of Artificial Drama:</strong> Because your baseline magnetic dip is horizontal and laminar, erratic emotional turbulence in social groups feels physically jarring and produces instant psychological detachment.</li>
+        </ul>
+
+        <!-- Animated Magnetospheric Cutaway Alien Schema -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-river-frost font-bold">FIGURE 3.1 &bull; 23:30 WAT MASS SHIELDING &amp; ANTI-SOLAR MAGNETOTAIL</span>
+            <span class="text-fire-gold">MASS SHIELD: 5.97 &times; 10<sup>24</sup> kg</span>
+          </div>
+          <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[140px]">
+            <!-- Incoming Solar Wind Streamlines with continuous dash animation -->
+            <line x1="20" y1="30" x2="160" y2="30" stroke="#fbb034" stroke-width="1.5" class="anim-dash-fast"/>
+            <line x1="20" y1="55" x2="140" y2="55" stroke="#ff7a1a" stroke-width="2" class="anim-dash-fast"/>
+            <line x1="20" y1="85" x2="140" y2="85" stroke="#ff7a1a" stroke-width="2" class="anim-dash-fast"/>
+            <line x1="20" y1="110" x2="160" y2="110" stroke="#fbb034" stroke-width="1.5" class="anim-dash-fast"/>
+            <text x="35" y="20" fill="#fbb034" font-size="8" font-family="monospace">Solar Wind Flux</text>
+
+            <!-- Pulsing Bow Shock Boundary Curve -->
+            <path d="M 185 10 Q 155 70 185 130" fill="none" stroke="#ff5414" stroke-width="2.5" class="anim-dash"/>
+
+            <!-- Magnetotail Plasma Tunnel Envelope -->
+            <path d="M 230 45 C 310 40 400 48 510 52 L 510 88 C 400 92 310 100 230 95 Z" fill="rgba(14, 165, 233, 0.12)" stroke="#0ea5e9" stroke-width="1.5" class="anim-dash"/>
+            <text x="370" y="73" fill="#7dd3fc" font-size="8" font-family="monospace">Laminar Magnetotail Conduit</text>
+
+            <!-- Earth Body (Day/Night Split) -->
+            <circle cx="230" cy="70" r="24" fill="#0369a1"/>
+            <path d="M 230 46 A 24 24 0 0 1 230 94 Z" fill="#070a0f"/>
+            <circle cx="230" cy="70" r="24" fill="none" stroke="#38bdf8" stroke-width="1.2"/>
+
+            <!-- Minna Inception Node (Pulsing Amber Radar Marker) -->
+            <g transform="translate(247, 66)">
+              <circle cx="0" cy="0" r="8" fill="none" stroke="#ff7a1a" stroke-width="1" class="anim-beacon"/>
+              <circle cx="0" cy="0" r="3.5" fill="#fbb034"/>
+              <text x="12" y="3" fill="#fde047" font-size="8" font-family="monospace" font-weight="bold">Minna 23:30 WAT Node</text>
+            </g>
+
+            <!-- Horizontal Field Lines across Earth's equator -->
+            <line x1="206" y1="66" x2="254" y2="66" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2"/>
+            <line x1="206" y1="74" x2="254" y2="74" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 03 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 4: The Jupiter-Saturn Quadrupole & Mars Perihelion Drive -->
+    <article id="folio-04" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Tensor Dynamics &bull; Chapter 04/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Jupiter-Saturn Quadrupole Shear &amp; Mars Perihelion Drive</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          Two major planetary vector structures defined early August 1973: the <strong>orthogonal quadrupole shear of the outer gas giants</strong> and the <strong>kinetic perihelic approach of Mars</strong>.
+        </p>
+
+        <!-- Quadrupole Explanation -->
+        <div class="p-4 bg-stone-slate/60 print:bg-slate-50 border border-fire-ember/40 rounded-xl">
+          <h4 class="font-serif text-sm font-bold text-white print:text-slate-900 mb-1 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-fire-ember animate-pulse"></span>
+            The 88.4&deg; Quadrupole Gravitational Shear (Jupiter &perp; Saturn)
+          </h4>
+          <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+            In 1973, Jupiter and Saturn sat at right angles relative to the solar center of mass. This geometry forms a <em>gravitational quadrupole tensor</em> across the inner solar system. Rather than planetary energies canceling each other out, they generate perpendicular compressive stresses. In human cognitive architecture, this manifests as:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1 text-stone-muted print:text-slate-600 text-[11px]">
+            <li><strong>Modular Systemic Engineering:</strong> You do not think in linear sentences; you think in orthogonal modular grids&mdash;interlocking frameworks that can withstand high stress.</li>
+            <li><strong>The Demand for Structural Proof:</strong> You have zero patience for ungrounded idealism or wishful thinking; every assertion must demonstrate mechanical integrity.</li>
+          </ul>
+        </div>
+
+        <!-- Mars Perihelion Explanation -->
+        <div class="p-4 bg-stone-slate/60 print:bg-slate-50 border border-river-flow/40 rounded-xl">
+          <h4 class="font-serif text-sm font-bold text-white print:text-slate-900 mb-1 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-river-flow animate-pulse"></span>
+            The High-Inclination Mars Perihelion Vector (1.39 AU)
+          </h4>
+          <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+            While Earth was moving at slow aphelion inertia, Mars was accelerating rapidly toward its closest perihelic approach to the Sun and Earth (culminating in late October 1973). Crucially, Mars was angled high above the solar invariant plane (+1.85&deg;).
+          </p>
+          <p class="text-stone-muted print:text-slate-600 text-[11px] mt-2 leading-relaxed">
+            This provides the <strong>kinetic spark</strong> to an otherwise quiet, contemplative, and heavy aphelion baseline. Without this Mars perihelion vector, your profile would risk contemplative paralysis (pure indexing with no building). With it, you possess an urgent, decisive drive to materialize blueprints into working physical reality.
+          </p>
+        </div>
+
+        <!-- Animated Quadrupole Alien Vector Diagram -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 4.1 &bull; 88.4&deg; ORTHOGONAL GRAVITATIONAL TENSOR &amp; MARS Z-TILT</span>
+            <span class="text-river-frost">QUADRUPOLE ANGLE = 88.4&deg; &bull; MARS TILT = +1.85&deg;</span>
+          </div>
+          <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[140px]">
+            <!-- Crosshair Grid lines -->
+            <line x1="260" y1="10" x2="260" y2="130" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="2 4"/>
+            <line x1="20" y1="70" x2="500" y2="70" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="2 4"/>
+
+            <!-- Center Sun -->
+            <circle cx="260" cy="70" r="14" fill="#fbb034" class="anim-beacon"/>
+            <circle cx="260" cy="70" r="5" fill="#ffffff"/>
+
+            <!-- Jupiter Mass Vector (Top) with animated compression wave -->
+            <g transform="translate(260, 20)">
+              <circle cx="0" cy="0" r="10" fill="none" stroke="#fbb034" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="6" fill="#fbb034"/>
+              <text x="18" y="4" fill="#fbb034" font-size="8" font-family="monospace">Jupiter Vector (1.898 &times; 10²⁷ kg)</text>
+              <line x1="0" y1="10" x2="0" y2="36" stroke="#fbb034" stroke-width="2" marker-end="url(#arrowPulse)"/>
+            </g>
+
+            <!-- Saturn Mass Vector (Right) with animated shear line -->
+            <g transform="translate(450, 70)">
+              <circle cx="0" cy="0" r="9" fill="none" stroke="#ff7a1a" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="5" fill="#ff7a1a"/>
+              <text x="-10" y="-14" fill="#ff7a1a" font-size="8" font-family="monospace" text-anchor="end">Saturn Vector (5.683 &times; 10²⁶ kg)</text>
+              <line x1="-10" y1="0" x2="-36" y2="0" stroke="#ff7a1a" stroke-width="2" marker-end="url(#arrowPulse)"/>
+            </g>
+
+            <!-- Orthogonal 88.4 deg angle arc indicator -->
+            <path d="M 285 70 A 25 25 0 0 0 260 45" fill="none" stroke="#ff5414" stroke-width="2" class="anim-dash-fast"/>
+            <text x="280" y="55" fill="#ff5414" font-size="8" font-family="monospace" font-weight="bold">88.4&deg;</text>
+
+            <!-- Mars Out-of-Plane Z-Axis Perihelion Arrow (Angled High) -->
+            <g transform="translate(140, 45)">
+              <circle cx="0" cy="0" r="7" fill="#ef4444" class="anim-beacon"/>
+              <circle cx="0" cy="0" r="3" fill="#ffffff"/>
+              <line x1="0" y1="0" x2="45" y2="15" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowPulse)"/>
+              <text x="-10" y="-6" fill="#f87171" font-size="8" font-family="monospace">Mars Perihelion (+1.85&deg; Z-Tilt)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 04 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 5: The Field Invariant Attractor (State-6 Operational Modes) -->
+    <article id="folio-05" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Attractor States &bull; Chapter 05/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Field Invariant Attractor: State-6 Manifold Dynamics</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          Traditional personality typologies assume human character is fixed. In FTA, an individual is modeled as an <strong>Adaptive Dynamical Attractor</strong> that shifts across three distinct phase states based on energetic load and environmental conditions. Your field is classified as:
+        </p>
+
+        <div class="text-center font-mono py-2 bg-stone-void border border-stone-border rounded-xl text-fire-gold font-bold text-sm shadow-inner flex items-center justify-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          TOPOLOGICAL CLASSIFICATION: STATE-6 [HYPERBOLIC-LAMINAR]
+        </div>
+
+        <!-- Animated Alien State-Machine Phase Manifold Schematic -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-river-frost font-bold">FIGURE 5.1 &bull; DYNAMICAL STATE-6 FINITE-STATE ATTRACTOR LOOPS</span>
+            <span class="text-fire-gold">TRANSITION FLUX: LAMINAR CONDUIT</span>
+          </div>
+          <svg viewBox="0 0 520 130" class="w-full h-auto max-h-[130px]">
+            <!-- Node 1: Ground State (Left) -->
+            <g transform="translate(90, 65)">
+              <circle cx="0" cy="0" r="32" fill="none" stroke="#0ea5e9" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="22" fill="rgba(14, 165, 233, 0.15)"/>
+              <circle cx="0" cy="0" r="4" fill="#38bdf8"/>
+              <text x="0" y="-3" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">GROUND</text>
+              <text x="0" y="10" fill="#7dd3fc" font-size="7" font-family="monospace" text-anchor="middle">Equilibrium</text>
+            </g>
+
+            <!-- Connecting Flow Arrow 1 to 2 -->
+            <path d="M 125 55 L 225 55" stroke="#38bdf8" stroke-width="2" class="anim-dash-fast" marker-end="url(#arrowPulse)"/>
+            <path d="M 225 75 L 125 75" stroke="#38bdf8" stroke-width="1.5" class="anim-dash-rev"/>
+            <text x="175" y="48" fill="#38bdf8" font-size="7" font-family="monospace" text-anchor="middle">Activation Flux</text>
+
+            <!-- Node 2: Kinetic State (Center) -->
+            <g transform="translate(260, 65)">
+              <circle cx="0" cy="0" r="32" fill="none" stroke="#fbb034" stroke-width="1.5" class="anim-dash-fast"/>
+              <circle cx="0" cy="0" r="22" fill="rgba(251, 176, 52, 0.15)"/>
+              <circle cx="0" cy="0" r="4" fill="#fbb034"/>
+              <text x="0" y="-3" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">KINETIC</text>
+              <text x="0" y="10" fill="#fde047" font-size="7" font-family="monospace" text-anchor="middle">Modular Build</text>
+            </g>
+
+            <!-- Connecting Flow Arrow 2 to 3 -->
+            <path d="M 295 65 L 395 65" stroke="#ef4444" stroke-width="2" class="anim-dash" marker-end="url(#arrowPulse)"/>
+            <text x="345" y="58" fill="#f87171" font-size="7" font-family="monospace" text-anchor="middle">Overload Trigger</text>
+
+            <!-- Node 3: Entropy State (Right) -->
+            <g transform="translate(430, 65)">
+              <circle cx="0" cy="0" r="32" fill="none" stroke="#ef4444" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="22" fill="rgba(239, 68, 68, 0.15)"/>
+              <circle cx="0" cy="0" r="4" fill="#ef4444" class="anim-beacon"/>
+              <text x="0" y="-3" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">ENTROPY</text>
+              <text x="0" y="10" fill="#fca5a5" font-size="7" font-family="monospace" text-anchor="middle">Lockout Mode</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- The 3 States Detailed -->
+        <div class="space-y-3 mt-4">
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border-l-4 border-river-flow rounded-r-xl">
+            <div class="flex justify-between items-baseline font-mono mb-1">
+              <span class="text-xs font-bold text-white print:text-slate-900 uppercase">1. Ground State: The Sovereign Synthesizer</span>
+              <span class="text-[10px] text-river-frost font-bold">EQUILIBRIUM &bull; REST MODE</span>
+            </div>
+            <p class="text-[11px] text-stone-muted print:text-slate-600 leading-relaxed">
+              <strong>Trigger:</strong> Solitary, quiet environments with low ambient noise and zero committee friction.<br>
+              <strong>Cognitive Mechanics:</strong> Minna's horizontal magnetic lines and the midnight shield dominate. You experience deep cognitive calm, effortlessly synthesizing disparate variables, studying complex history, and architecting systems without anxiety.
+            </p>
+          </div>
+
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border-l-4 border-fire-blaze rounded-r-xl">
+            <div class="flex justify-between items-baseline font-mono mb-1">
+              <span class="text-xs font-bold text-white print:text-slate-900 uppercase">2. Kinetic State: The Modular Architect</span>
+              <span class="text-[10px] text-fire-gold font-bold">EXECUTION &bull; BUILD MODE</span>
+            </div>
+            <p class="text-[11px] text-stone-muted print:text-slate-600 leading-relaxed">
+              <strong>Trigger:</strong> An isolated, well-defined technical or systemic challenge with clear boundaries.<br>
+              <strong>Cognitive Mechanics:</strong> The Mars perihelion vector and Jupiter-Saturn quadrupole shear engage. You build with relentless, modular discipline. You do not stop until a functional, offline-first, tangible artifact is completed.
+            </p>
+          </div>
+
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border-l-4 border-fire-ember rounded-r-xl">
+            <div class="flex justify-between items-baseline font-mono mb-1">
+              <span class="text-xs font-bold text-white print:text-slate-900 uppercase">3. Entropy State: Hyper-Categorical Lockout</span>
+              <span class="text-[10px] text-fire-ember font-bold">OVERLOAD &bull; DEFENSE MODE</span>
+            </div>
+            <p class="text-[11px] text-stone-muted print:text-slate-600 leading-relaxed">
+              <strong>Trigger:</strong> Sustained exposure to chaotic social environments, vague committees, or emotional blackmail.<br>
+              <strong>Cognitive Mechanics:</strong> The prime year tensor (1973) completely uncouples from the environment. You shut down all emotional responsiveness, becoming hyper-categorical, blunt, and aloof until you can withdraw to silence.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 05 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 6: Stress-Strain Mechanics & Somatic Diagnostics -->
+    <article id="folio-06" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          System Diagnostics &bull; Chapter 06/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">Stress-Strain Mechanics, Yield Points &amp; Somatic Diagnostics</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          Every mechanical structure possesses an elastic limit: the threshold beyond which stress no longer causes temporary deflection, but permanent plastic deformation. In FTA, this is modeled as the <strong>Cognitive Stress-Strain Curve</strong>.
+        </p>
+
+        <!-- Animated Stress-Strain Curve Alien Tech Schematic -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 6.1 &bull; COGNITIVE ELASTICITY VS. PLASTIC LOCKOUT THRESHOLD</span>
+            <span class="text-rose-400">YIELD POINT (&sigma;_y) AT 70% NOISE SATURATION</span>
+          </div>
+          <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[140px]">
+            <!-- Axes -->
+            <line x1="40" y1="120" x2="490" y2="120" stroke="#334155" stroke-width="1.5"/>
+            <line x1="40" y1="15" x2="40" y2="120" stroke="#334155" stroke-width="1.5"/>
+            <text x="490" y="132" fill="#64748b" font-size="8" font-family="monospace">Strain (&epsilon;) / External Noise</text>
+            <text x="35" y="12" fill="#64748b" font-size="8" font-family="monospace" text-anchor="end">Stress (&sigma;)</text>
+
+            <!-- Elastic Region Curve (Green-Blue) -->
+            <line x1="40" y1="120" x2="220" y2="45" stroke="#38bdf8" stroke-width="2.5" class="anim-dash-fast"/>
+            <text x="130" y="70" fill="#38bdf8" font-size="8" font-family="monospace" transform="rotate(-23 130 70)">Elastic Zone (Clean Recovery)</text>
+
+            <!-- Yield Point Beacon Marker -->
+            <g transform="translate(220, 45)">
+              <circle cx="0" cy="0" r="10" fill="none" stroke="#fbb034" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="4.5" fill="#fbb034" class="anim-beacon"/>
+              <text x="0" y="-14" fill="#fbb034" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Yield Point (&sigma;_y)</text>
+              <line x1="0" y1="0" x2="0" y2="75" stroke="#fbb034" stroke-width="1" stroke-dasharray="2 2"/>
+            </g>
+
+            <!-- Plastic Deformation & Lockout Region (Red Flashing) -->
+            <path d="M 220 45 Q 310 38 480 65" fill="none" stroke="#ef4444" stroke-width="2.5" class="anim-dash"/>
+            <text x="360" y="45" fill="#f87171" font-size="8" font-family="monospace">Plastic Lockout (Inductive Shutdown)</text>
+
+            <!-- Grounding reset pulse -->
+            <path d="M 460 70 C 430 110 300 118 160 118" fill="none" stroke="#34d399" stroke-width="1.5" class="anim-dash-rev" marker-end="url(#arrowPulse)"/>
+            <text x="310" y="112" fill="#34d399" font-size="8" font-family="monospace">Reset Protocol Return Path</text>
+          </svg>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-fire-ember pl-3 mt-4">
+          Warning Signs of Imminent Field Lockout:
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2">
+          <div class="p-3 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold font-bold block text-[10px] uppercase">1. Compulsive Filing &amp; Re-organizing</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] mt-0.5">When overwhelmed by human ambiguity, you begin compulsively renaming computer files, reorganizing databases, or cleaning tools. This is a somatic attempt to force order onto chaos.</p>
+          </div>
+          <div class="p-3 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-ember font-bold block text-[10px] uppercase">2. Linguistic Monosyllables</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] mt-0.5">Your speech shifts from expansive multi-variable synthesis to blunt, single-syllable acknowledgments. Communication channels are intentionally constricted to preserve mental energy.</p>
+          </div>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-river-flow pl-3 mt-4">
+          The Grounding Antidote (The Reset Protocol):
+        </h3>
+        <p class="text-justify">
+          Because your inception occurred at the geomagnetic equator near water (the Chanchaga river basin of Minna), digital screens and artificial lighting worsen field lockup. To reset:
+        </p>
+        <p class="p-3 bg-stone-slate/40 print:bg-slate-50 border-l-2 border-river-flow rounded-r-xl text-slate-200 print:text-slate-800 text-[11px]">
+          <strong>The Cold River &amp; Wood Fire Protocol:</strong> Disengage completely from digital telecommunications. Engage in tactile, analog activity: outdoor walking near flowing water, splitting wood, observing open wood smoke, or working with physical stone or steel. This breaks the high-frequency mental loop and restores the low-frequency equatorial baseline within two to four hours.
+        </p>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 06 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 7: Orbital Chronometry & Age 53 Distillation Gateway -->
+    <article id="folio-07" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Temporal Chronometry &bull; Chapter 07/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">Orbital Beat Chronometry &amp; The Age 53 Distillation Gateway</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          In FTA, time is not an arbitrary clock face. Time is measured by the <strong>Laplace resonance beat frequencies of the outer gas giants</strong> relative to your initial inception matrix. 
+        </p>
+
+        <!-- Animated Chronometric Resonance Timeline -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 7.1 &bull; 80-YEAR ORBITAL HARMONIC CONVERGENCE &amp; AGE 53 GATEWAY</span>
+            <span class="text-river-frost">SATURN BEAT: 1.8 CIRCUITS &bull; JUPITER OCTAVE: 4.5</span>
+          </div>
+          <svg viewBox="0 0 520 135" class="w-full h-auto max-h-[135px]">
+            <!-- Timeline Axis -->
+            <line x1="30" y1="90" x2="490" y2="90" stroke="#334155" stroke-width="1.5"/>
+            
+            <!-- Saturn 29.45 Year Beat Wave (Golden) -->
+            <path d="M 30 90 Q 115 25 200 90 T 370 90 T 490 90" fill="none" stroke="#fbb034" stroke-width="2" class="anim-dash"/>
+            <text x="35" y="35" fill="#fbb034" font-size="8" font-family="monospace">Saturn Circuit (29.45 yr)</text>
+
+            <!-- Jupiter 11.86 Year Beat Wave (Blue) -->
+            <path d="M 30 90 Q 65 50 100 90 T 170 90 T 240 90 T 310 90 T 380 90 T 450 90" fill="none" stroke="#38bdf8" stroke-width="1.5" class="anim-dash-fast" opacity="0.6"/>
+            <text x="35" y="47" fill="#38bdf8" font-size="8" font-family="monospace">Jupiter Octave (11.86 yr)</text>
+
+            <!-- Epoch Marker 1: Age 29.5 -->
+            <circle cx="200" cy="90" r="4" fill="#64748b"/>
+            <text x="200" y="105" fill="#94a3b8" font-size="8" font-family="monospace" text-anchor="middle">Age 29.5</text>
+            <text x="200" y="116" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle">Circuit 1</text>
+
+            <!-- Epoch Marker 2: Current Inception Gateway Age 53 (Pulsing Laser Reticle) -->
+            <g transform="translate(340, 90)">
+              <line x1="0" y1="-70" x2="0" y2="25" stroke="#ff5414" stroke-width="2" class="anim-dash-fast"/>
+              <circle cx="0" cy="0" r="10" fill="none" stroke="#ff5414" stroke-width="1.5" class="anim-dash"/>
+              <circle cx="0" cy="0" r="4.5" fill="#fbb034" class="anim-beacon"/>
+              <text x="0" y="-74" fill="#fbb034" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">AGE 53 GATEWAY</text>
+              <text x="0" y="34" fill="#ff7a1a" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">Distillation Pivot</text>
+            </g>
+
+            <!-- Epoch Marker 3: Age 80+ -->
+            <circle cx="480" cy="90" r="4" fill="#64748b"/>
+            <text x="480" y="105" fill="#94a3b8" font-size="8" font-family="monospace" text-anchor="middle">Age 80+</text>
+            <text x="480" y="116" fill="#64748b" font-size="7" font-family="monospace" text-anchor="middle">Circuit 3</text>
+          </svg>
+        </div>
+
+        <!-- Life Epoch Stages -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
+          <div class="p-3 bg-stone-slate/40 print:bg-slate-100 border border-stone-border rounded-xl">
+            <span class="font-mono text-stone-muted block text-[10px] uppercase">Ages 0 &ndash; 29.5 &bull; Circuit 1</span>
+            <strong class="text-white print:text-slate-900 block text-xs mt-1">Foundation &amp; Intake</strong>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] mt-1">Accumulation of raw technical primitives, testing external paradigms, discovering the limitations of standard cultural models.</p>
+          </div>
+          <div class="p-3 bg-stone-slate/40 print:bg-slate-100 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold block text-[10px] uppercase">Ages 29.5 &ndash; 52 &bull; Circuit 2A</span>
+            <strong class="text-white print:text-slate-900 block text-xs mt-1">Kinetic Construction</strong>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] mt-1">Deploying the Mars perihelion drive. Building infrastructure, testing systems under real-world friction, establishing personal sovereignty.</p>
+          </div>
+          <div class="p-3 bg-stone-slate/40 print:bg-slate-100 border border-fire-ember/50 rounded-xl">
+            <span class="font-mono text-fire-ember font-bold block text-[10px] uppercase">Ages 53 &ndash; 80+ &bull; Circuit 2B</span>
+            <strong class="text-fire-gold block text-xs mt-1">The Distillation Folio</strong>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] mt-1">Eliminating excess bloat. Packaging decades of insight into autonomous, sovereign artifacts that operate with zero maintenance.</p>
+          </div>
+        </div>
+
+        <h3 class="font-serif text-base font-bold text-white print:text-slate-900 border-l-2 border-fire-gold pl-3 mt-4">
+          The Strategic Directives for Age 53:
+        </h3>
+        <ul class="list-disc pl-5 space-y-1.5 text-stone-muted print:text-slate-600 text-[11px]">
+          <li><strong>Refusal of Multi-Tiered Dependencies:</strong> Do not build systems that require 20 external APIs, ongoing maintenance agreements, or committee approvals. Build single-file, offline-first structures.</li>
+          <li><strong>Distillation Over Accumulation:</strong> Stop taking on more raw data. Your task is now compression: converting complex multi-variable archives into clear, accessible master folios.</li>
+          <li><strong>Sovereign Transmission:</strong> Share your architecture directly with peers who possess the cognitive capacity to run wave interference calculations, ignoring mass validation.</li>
+        </ul>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 07 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 8: The Biophysical Operational Playbook -->
+    <article id="folio-08" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Operational Protocols &bull; Chapter 08/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Biophysical Operational Playbook</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          To sustain the State-6 attractor at peak efficiency without slipping into entropy lockout, adhere to the following daily and environmental operational protocols:
+        </p>
+
+        <!-- Animated Alien Circadian Clock Dial Schema -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 8.1 &bull; 24-HOUR BIOPHYSICAL PHASE-SPACE ROTATION MATRIX</span>
+            <span class="text-river-frost">NOCTURNAL PEAK: 21:00 &ndash; 01:30</span>
+          </div>
+          <svg viewBox="0 0 520 130" class="w-full h-auto max-h-[130px]">
+            <!-- Circular Horizon Arc with sweep animation -->
+            <g transform="translate(260, 65)">
+              <circle cx="0" cy="0" r="54" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="0" cy="0" r="54" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="10 8" class="anim-dash-fast"/>
+              <!-- Crosshairs -->
+              <line x1="-60" y1="0" x2="60" y2="0" stroke="#334155" stroke-width="1"/>
+              <line x1="0" y1="-60" x2="0" y2="60" stroke="#334155" stroke-width="1"/>
+              
+              <!-- Rotating Radar Scanner Line -->
+              <line x1="0" y1="0" x2="48" y2="-24" stroke="#ff7a1a" stroke-width="2" class="anim-sweep"/>
+              <circle cx="0" cy="0" r="6" fill="#fbb034" class="anim-beacon"/>
+              
+              <!-- Quadrant Markers -->
+              <text x="0" y="-40" fill="#fbb034" font-size="7" font-family="monospace" text-anchor="middle">12:00 SOLAR PEAK</text>
+              <text x="0" y="46" fill="#38bdf8" font-size="7" font-family="monospace" text-anchor="middle">23:30 WAT INCEPTION</text>
+              <text x="-48" y="4" fill="#94a3b8" font-size="7" font-family="monospace" text-anchor="end">06:00</text>
+              <text x="48" y="4" fill="#94a3b8" font-size="7" font-family="monospace" text-anchor="start">18:00</text>
+            </g>
+
+            <!-- Phase 1: Ground -->
+            <g transform="translate(60, 65)">
+              <rect x="-40" y="-30" width="80" height="60" rx="8" fill="rgba(14, 165, 233, 0.1)" stroke="#0ea5e9" stroke-width="1" class="anim-dash"/>
+              <text x="0" y="-10" fill="#38bdf8" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">06:00 &ndash; 09:30</text>
+              <text x="0" y="6" fill="#ffffff" font-size="7" font-family="monospace" text-anchor="middle">Ground State</text>
+              <text x="0" y="18" fill="#94a3b8" font-size="6" font-family="monospace" text-anchor="middle">Zero Clutter</text>
+            </g>
+
+            <!-- Phase 2: Distillation -->
+            <g transform="translate(460, 65)">
+              <rect x="-40" y="-30" width="80" height="60" rx="8" fill="rgba(255, 84, 20, 0.1)" stroke="#ff5414" stroke-width="1" class="anim-dash"/>
+              <text x="0" y="-10" fill="#fbb034" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">21:00 &ndash; 01:30</text>
+              <text x="0" y="6" fill="#ffffff" font-size="7" font-family="monospace" text-anchor="middle">Synthesis Node</text>
+              <text x="0" y="18" fill="#94a3b8" font-size="6" font-family="monospace" text-anchor="middle">Master Folios</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 3 Pillars Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 my-3">
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-river-frost font-bold block mb-1 uppercase text-[11px]">1. Acoustic Environment</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+              Maintain an aggressive low-noise boundary. Because your inception occurred at the quiet equatorial electrojet, loud open-plan offices, chaotic cafes, and background television represent a continuous biological parasite on your cognitive throughput. Work in quiet, closed spaces.
+            </p>
+          </div>
+
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold font-bold block mb-1 uppercase text-[11px]">2. Circadian Energy Architecture</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+              Honor your 23:30 WAT Midnight Inception Node. Do not schedule complex architectural writing or philosophical synthesis for 9:00 AM meetings. Execute outward logistical tasks midday; protect the 21:00 to 01:30 window for deep creative distillation.
+            </p>
+          </div>
+
+          <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-blaze font-bold block mb-1 uppercase text-[11px]">3. Sovereign System Rule</span>
+            <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+              Never accept a software tool, workflow, or financial system where a third party holds the master encryption key. If a tool cannot run offline on your local machine without subscription servers, it violates your aphelion structural requirement.
+            </p>
+          </div>
+        </div>
+
+        <!-- Somatic Environmental Tuning Table -->
+        <div class="border border-stone-border print:border-slate-300 rounded-xl overflow-hidden font-mono text-[10px] my-4">
+          <div class="grid grid-cols-3 bg-stone-void print:bg-slate-100 p-2.5 text-stone-muted font-bold border-b border-stone-border">
+            <div>Parameter</div>
+            <div>Harmonic Setting (Peak State)</div>
+            <div class="text-fire-ember">Friction Source to Eliminate</div>
+          </div>
+          <div class="grid grid-cols-3 p-2.5 border-b border-stone-border/50 text-slate-300 print:text-slate-700">
+            <div class="font-bold text-white">Lighting Spectrum</div>
+            <div>Warm flame amber / low indirect warm 2700K</div>
+            <div class="text-rose-400">Harsh 6500K blue fluorescent tubes</div>
+          </div>
+          <div class="grid grid-cols-3 p-2.5 border-b border-stone-border/50 text-slate-300 print:text-slate-700">
+            <div class="font-bold text-white">Collaboration Model</div>
+            <div>Asynchronous, written architectural specs</div>
+            <div class="text-rose-400">Ambiguous, meandering zoom calls</div>
+          </div>
+          <div class="grid grid-cols-3 p-2.5 text-slate-300 print:text-slate-700">
+            <div class="font-bold text-white">Drafting Media</div>
+            <div>Heavy ink, fountain pen, dense paper, plain text</div>
+            <div class="text-rose-400">Over-animated, bloated SaaS dashboards</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 08 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 9: Relational Field Collision & Interference Matrix -->
+    <article id="folio-09" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div class="border-b-2 border-stone-border pb-4 mb-6">
+        <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+          Relational Tensors &bull; Chapter 09/10
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">Relational Field Collision &amp; Wave Interference Mechanics</h2>
+      </div>
+
+      <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
+        <p class="text-justify">
+          Classical compatibility asks whether a &ldquo;Leo gets along with an Aries.&rdquo; In FTA, human relationship is calculated as the <strong>spatial wave interference of two three-dimensional vector trajectories</strong>.
+        </p>
+
+        <!-- Animated Wave Interference Holographic Schematic -->
+        <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
+            <span class="text-fire-gold font-bold">FIGURE 9.1 &bull; DUAL IDENTIFY WAVE INTERFERENCE &amp; COSINE SIMILARITY</span>
+            <span class="text-river-frost">CONSTRUCTIVE COUPLING [cos(&theta;) = 0.892]</span>
+          </div>
+          <svg viewBox="0 0 520 130" class="w-full h-auto max-h-[130px]">
+            <!-- Wave 1 (Profile A - Bala Danmeri - Amber) -->
+            <path d="M 30 40 Q 90 10 150 40 T 270 40 T 390 40 T 500 40" fill="none" stroke="#fbb034" stroke-width="2" class="anim-dash-fast"/>
+            <text x="35" y="24" fill="#fbb034" font-size="8" font-family="monospace">Vector A (Bala Danmeri Inception Wave)</text>
+
+            <!-- Wave 2 (Profile B - Target Collaborator - Blue) -->
+            <path d="M 30 45 Q 90 20 150 45 T 270 45 T 390 45 T 500 45" fill="none" stroke="#38bdf8" stroke-width="1.8" class="anim-dash" opacity="0.8"/>
+            <text x="350" y="24" fill="#38bdf8" font-size="8" font-family="monospace">Vector B (Peer Wave)</text>
+
+            <!-- Composite Standing Wave (Amplified White Synthesis Core) -->
+            <path d="M 30 95 Q 90 60 150 95 T 270 95 T 390 95 T 500 95" fill="none" stroke="#ffffff" stroke-width="2.5" class="anim-dash"/>
+            <text x="35" y="115" fill="#ffffff" font-size="8" font-family="monospace" font-weight="bold">Standing Resonance Wave &bull; Constructive Synthesis Field</text>
+            <text x="420" y="115" fill="#34d399" font-size="8" font-family="monospace">Zero Phase Cancel</text>
+          </svg>
+        </div>
+
+        <!-- The 3 Mathematical Compatibility Pillars -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3">
+          <div class="p-3.5 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-river-frost font-bold block text-[11px] mb-1">1. Cosine Alignment [cos(&theta;)]</span>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] leading-relaxed">
+              Measures whether two profiles share the same directional momentum vector. High values (&gt; 0.85) mean both parties intuitively understand foundational assumptions with minimal verbal explanation.
+            </p>
+          </div>
+          <div class="p-3.5 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-gold font-bold block text-[11px] mb-1">2. Tidal Lock Risk [T_lock]</span>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] leading-relaxed">
+              Measures whether stress in one person induces runaway panic or defensive lockout in the other. Low tidal lock (&lt; 35%) ensures that when one person decompresses, the other maintains equilibrium.
+            </p>
+          </div>
+          <div class="p-3.5 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
+            <span class="font-mono text-fire-ember font-bold block text-[11px] mb-1">3. Quadrupole Shear Friction [&tau;]</span>
+            <p class="text-stone-muted print:text-slate-600 text-[10px] leading-relaxed">
+              Measures the cross-shear between their gravitational execution styles. Laminar flow (&lt; 0.20) indicates that outward execution does not disrupt the other's contemplative rhythm.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-4 bg-stone-slate/60 print:bg-slate-100 border border-stone-border rounded-xl mt-3">
+          <span class="font-mono text-fire-gold font-bold uppercase text-[10px] block mb-1">How Bala Danmeri Interacts With Other Field Types:</span>
+          <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
+            Because your profile is an <em>Aphelion High-Inertia State-6</em>, you serve as a stabilizing gravitational anchor for high-velocity, volatile perihelion profiles. However, if paired with another high-inertia profile that lacks an equatorial midnight shield, mutual stubbornness can occur. Your ideal collaborators are <strong>Laminar-Kinetic Engineers</strong> who supply specific modular execution without introducing emotional turbulence.
+          </p>
+        </div>
+
+        <!-- Verification link box -->
+        <div class="border-2 border-dashed border-fire-ember/50 bg-stone-void rounded-xl p-4 text-center mt-4">
+          <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold font-bold mb-1">Peer Collision Engine Link</div>
+          <p class="text-stone-muted print:text-slate-600 text-[10px] mb-2">Recipients can run exact wave interference and cosine similarity against this profile:</p>
+          <div class="inline-block bg-stone-abyss print:bg-white border border-stone-border rounded-lg px-3 py-1.5 text-[10px] font-mono text-fire-gold print:text-slate-800 break-all select-all">
+            https://somersetnomad.github.io/DSVN/?fta=Bala+Danmeri&amp;date=1973-08-04&amp;time=23:30&amp;lat=9.61&amp;lon=6.55
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between text-[10px] font-mono text-stone-muted">
+        <span>FTA MASTER TREATISE &bull; ARCHIVAL REF 1973-MINNA-2330</span>
+        <span>CHAPTER 09 OF 10</span>
+      </div>
+    </article>
+
+    <!-- DOSSIER CHAPTER 10: Official Archival Seal & Invariant Monograph Certificate -->
+    <article id="folio-10" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative flex flex-col justify-between overflow-hidden">
+      <div>
+        <div class="border-b-2 border-stone-border pb-4 mb-6">
+          <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
+            Certification &bull; Chapter 10/10
+          </div>
+          <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">Official Archival Certificate &amp; Inception Seal</h2>
+        </div>
+
+        <p class="text-xs text-slate-300 print:text-slate-700 leading-relaxed mb-6">
+          This certifies that the astrometric telemetry herein was calculated via rigorous three-dimensional barycentric orbital mechanics, local magnetospheric plasma vector modeling, and equatorial geomagnetic dip induction, superseding flat-sky astrological methods.
+        </p>
+
+        <!-- Formal Archival Certificate Box with Animated Hyper-Dimensional Hologram Ring -->
+        <div class="border-2 border-stone-border bg-stone-void rounded-2xl p-6 text-center space-y-4 my-4 shadow-flame relative overflow-hidden">
+          <div class="flex justify-center relative">
+            <!-- Animated Alien Tech Holographic Seal Rings -->
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <svg class="absolute inset-0 w-full h-full text-river-flow anim-sweep" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 6"/>
+              </svg>
+              <svg class="absolute inset-0 w-full h-full text-fire-gold anim-sweep-fast" viewBox="0 0 100 100" style="animation-direction: reverse;">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+              </svg>
+              <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-stone-slate to-fire-ember/40 flex items-center justify-center border-2 border-fire-gold shadow-ember relative z-10">
+                <svg class="w-9 h-9 text-fire-gold flame-glow" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C12 2 18 8 18 14C18 17.3 15.3 20 12 20C8.7 20 6 17.3 6 14C6 8 12 2 12 2Z" fill="#ff7a1a"/>
+                  <circle cx="12" cy="14" r="3" fill="#ffffff"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-fire-gold font-bold block">COMMISSIONED MASTER TREATISE MONOGRAPH</span>
+            <h3 class="font-serif text-xl font-bold text-white print:text-slate-900 mt-1">Bala Danmeri &bull; Inception Vector Verification</h3>
+            <span class="text-xs font-mono text-river-frost block mt-0.5">Minna, Nigeria (9.61&deg; N, 6.55&deg; E) &bull; 4 August 1973, 23:30 WAT</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left font-mono text-[10px] pt-3 border-t border-stone-border">
+            <div>
+              <span class="text-stone-muted block">Heliocentric Distance</span>
+              <strong class="text-white">1.015 AU (Aphelion)</strong>
+            </div>
+            <div>
+              <span class="text-stone-muted block">Geomagnetic Dip</span>
+              <strong class="text-white">&plusmn;0.8&deg; (Horizontal)</strong>
+            </div>
+            <div>
+              <span class="text-stone-muted block">Attractor State</span>
+              <strong class="text-white">State-6 (Hyperbolic)</strong>
+            </div>
+            <div>
+              <span class="text-stone-muted block">Verification Hash</span>
+              <strong class="text-fire-gold">FTA-730804-MNA-2330</strong>
+            </div>
+          </div>
+
+          <p class="text-[10px] text-stone-muted print:text-slate-500 italic max-w-md mx-auto pt-2">
+            &ldquo;Sovereignty is not claimed through volume; it is established through the quiet, immutable physics of an aphelion orbit shielded by a planetary core.&rdquo;
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-stone-border flex justify-between items-end text-[10px] font-mono text-stone-muted">
+        <div>
+          <span>DOCUMENT STATUS: </span>
+          <span class="text-river-frost font-bold">ARCHIVAL COMMISSION VERIFIED &bull; &pound;275 MONOGRAPH EDITION</span>
+        </div>
+        <span>CHAPTER 10 OF 10 &bull; COMPLETE MASTER DOSSIER</span>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ================= RELATIONAL 3D FIELD COLLISION MODAL ================= -->
+  <div id="compareModal" class="fixed inset-0 z-50 bg-stone-void/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-stone-abyss border border-stone-border rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl text-slate-200 relative alien-grid">
+      
+      <div class="flex items-center justify-between border-b border-stone-border pb-4 mb-5">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-white flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-fire-ember animate-pulse"></span>
+            Relational 3D Field Interference &amp; Tidal Coupling
+          </h3>
+          <p class="text-xs text-stone-muted mt-0.5">Calculates true spatial wave alignment, barycentric cosine angle, and mutual stress lock</p>
+        </div>
+        <button onclick="closeCompareModal()" class="text-stone-muted hover:text-white text-xl p-1 font-mono">&times;</button>
+      </div>
+
+      <!-- Input Slot for Profile B -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div class="p-4 bg-stone-slate/60 border border-river-flow/40 rounded-xl">
+          <span class="text-[10px] font-mono uppercase text-river-frost block mb-1 font-bold">Anchor Coordinate (Profile A)</span>
+          <div class="text-sm font-serif font-bold text-white" id="cmpAnchorName">Bala Danmeri</div>
+          <div class="text-xs text-stone-muted font-mono mt-0.5" id="cmpAnchorMeta">Minna, Nigeria &bull; 1973-08-04 23:30</div>
+        </div>
+
+        <div class="p-4 bg-stone-slate/60 border border-fire-ember/40 rounded-xl">
+          <span class="text-[10px] font-mono uppercase text-fire-gold block mb-1 font-bold">Target Coordinate (Profile B)</span>
+          <div class="space-y-2">
+            <input type="text" id="cmpTargetName" placeholder="Second Person Name" value="Collaborator X" class="w-full bg-stone-void border border-stone-border rounded-xl px-2.5 py-1.5 text-xs text-white font-mono focus:border-fire-blaze outline-none">
+            <div class="grid grid-cols-2 gap-2">
+              <input type="date" id="cmpTargetDate" value="1980-05-15" class="bg-stone-void border border-stone-border rounded-xl px-2 py-1.5 text-xs text-white font-mono focus:border-fire-blaze outline-none">
+              <input type="time" id="cmpTargetTime" value="14:00" class="bg-stone-void border border-stone-border rounded-xl px-2 py-1.5 text-xs text-white font-mono focus:border-fire-blaze outline-none">
+            </div>
+            <button onclick="calculateComparison()" class="w-full py-2 bg-gradient-to-r from-fire-ember to-fire-blaze hover:brightness-110 text-stone-void font-mono font-bold text-xs rounded-xl transition shadow-flame flex items-center justify-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-stone-void animate-ping"></span>
+              Calculate Wave Interference
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Metrics Output -->
+      <div id="cmpResults" class="space-y-4">
+        <div class="grid grid-cols-3 gap-3 text-center font-mono">
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[10px] text-stone-muted uppercase font-bold">Cosine Alignment</div>
+            <div class="text-xl font-bold text-river-frost mt-1" id="cmpCosSim">0.892</div>
+            <div class="text-[10px] text-river-flow mt-0.5" id="cmpCosGrade">Harmonic Coupling</div>
+          </div>
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[10px] text-stone-muted uppercase font-bold">Tidal Lock Risk</div>
+            <div class="text-xl font-bold text-fire-gold mt-1" id="cmpTidalRisk">28%</div>
+            <div class="text-[10px] text-stone-muted mt-0.5">Low Contagion</div>
+          </div>
+          <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
+            <div class="text-[10px] text-stone-muted uppercase font-bold">Shear Friction</div>
+            <div class="text-xl font-bold text-fire-blaze mt-1" id="cmpShear">0.14</div>
+            <div class="text-[10px] text-stone-muted mt-0.5">Laminar Flow</div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-stone-slate/60 border border-stone-border rounded-xl text-xs leading-relaxed text-slate-300">
+          <span class="font-mono text-fire-gold font-bold block mb-1">Qualitative Relational Synthesis:</span>
+          <p id="cmpSynthesisText">
+            Vector comparison between Bala Danmeri and Collaborator X demonstrates high directional coupling (cos &theta; = 0.892). Communication is natural and requires minimal translation of foundational concepts. Neither system induces high tidal burnout in the other.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= SCRIPT LOGIC ================= -->
+  <script>
+    let orbitAnimActive = true;
+    let cameraRotation = { x: 0.52, y: -0.42 };
+    let cameraZoom = 1.05;
+    let isDragging = false;
+    let lastMousePos = { x: 0, y: 0 };
+    let waveOffset = 0;
+    let quadrupolePhase = 0;
+
+    // Comprehensive Worldwide City Geocoding Database for instant lookup
+    const CITY_DATABASE = [
+      // Nigeria / West Africa Focus
+      { name: "Minna", country: "Nigeria", region: "West Africa", lat: 9.61, lon: 6.55, desc: "Equatorial Electrojet &bull; Horizontal Magnetic Shield" },
+      { name: "Abuja", country: "Nigeria", region: "West Africa", lat: 9.07, lon: 7.49, desc: "Federal Capital &bull; Sub-Equatorial Shield" },
+      { name: "Lagos", country: "Nigeria", region: "West Africa", lat: 6.52, lon: 3.37, desc: "Atlantic Coastal Zone &bull; Equatorial Belt" },
+      { name: "Kano", country: "Nigeria", region: "West Africa", lat: 12.00, lon: 8.59, desc: "Sahelian Horizon &bull; Northern Equatorial Fringe" },
+      { name: "Ibadan", country: "Nigeria", region: "West Africa", lat: 7.37, lon: 3.94, desc: "Yorubaland Plateau &bull; Equatorial Dip" },
+      { name: "Port Harcourt", country: "Nigeria", region: "West Africa", lat: 4.81, lon: 7.04, desc: "Niger Delta Basin &bull; Equatorial Marine" },
+      { name: "Accra", country: "Ghana", region: "West Africa", lat: 5.60, lon: -0.18, desc: "Gulf of Guinea &bull; Prime Meridian Zone" },
+      { name: "Dakar", country: "Senegal", region: "West Africa", lat: 14.71, lon: -17.46, desc: "Cap-Vert Peninsula &bull; Westernmost African Shield" },
+      { name: "Nairobi", country: "Kenya", region: "East Africa", lat: -1.29, lon: 36.82, desc: "Rift Valley Highland &bull; Exact Equatorial Baseline" },
+      { name: "Johannesburg", country: "South Africa", region: "Southern Africa", lat: -26.20, lon: 28.04, desc: "Highveld Plateau &bull; Southern Magnetic Shield" },
+      { name: "Cairo", country: "Egypt", region: "North Africa", lat: 30.04, lon: 31.23, desc: "Nile Delta &bull; Mediterranean Sub-Tropical Belt" },
+
+      // UK & Europe
+      { name: "London", country: "United Kingdom", region: "Western Europe", lat: 51.50, lon: -0.12, desc: "Temperate Steep Magnetic Dip (66° Inclination)" },
+      { name: "Somerset", country: "United Kingdom", region: "Western Europe", lat: 51.10, lon: -2.90, desc: "Mendip/Avalon Belt &bull; High Dip Shield" },
+      { name: "Manchester", country: "United Kingdom", region: "Western Europe", lat: 53.48, lon: -2.24, desc: "Northern Temperate Dip" },
+      { name: "Edinburgh", country: "United Kingdom", region: "Western Europe", lat: 55.95, lon: -3.18, desc: "Sub-Boreal High Dip Horizon" },
+      { name: "Paris", country: "France", region: "Western Europe", lat: 48.85, lon: 2.35, desc: "Central Continental Basin" },
+      { name: "Berlin", country: "Germany", region: "Central Europe", lat: 52.52, lon: 13.40, desc: "North European Plain &bull; Steep Dip" },
+      { name: "Rome", country: "Italy", region: "Southern Europe", lat: 41.90, lon: 12.49, desc: "Mediterranean Sub-Temperate Belt" },
+      { name: "Madrid", country: "Spain", region: "Southern Europe", lat: 40.41, lon: -3.70, desc: "Iberian Meseta Shield" },
+
+      // Americas
+      { name: "New York", country: "United States", region: "North America", lat: 40.71, lon: -74.00, desc: "Atlantic Coastal Temperate Belt" },
+      { name: "Los Angeles", country: "United States", region: "North America", lat: 34.05, lon: -118.24, desc: "Pacific Coastal Horizon" },
+      { name: "Chicago", country: "United States", region: "North America", lat: 41.87, lon: -87.62, desc: "Great Lakes Geomagnetic Dip" },
+      { name: "Toronto", country: "Canada", region: "North America", lat: 43.65, lon: -79.38, desc: "Laurentian Shield Perimeter" },
+      { name: "São Paulo", country: "Brazil", region: "South America", lat: -23.55, lon: -46.63, desc: "South Atlantic Magnetic Anomaly Zone" },
+      { name: "Buenos Aires", country: "Argentina", region: "South America", lat: -34.60, lon: -58.38, desc: "Río de la Plata Basin" },
+
+      // Asia & Oceania
+      { name: "Tokyo", country: "Japan", region: "East Asia", lat: 35.67, lon: 139.65, desc: "Pacific Ring &bull; Temperate Insular Shield" },
+      { name: "Beijing", country: "China", region: "East Asia", lat: 39.90, lon: 116.40, desc: "North China Plain &bull; Continental Plate" },
+      { name: "Mumbai", country: "India", region: "South Asia", lat: 19.07, lon: 72.87, desc: "Arabian Sea Coast &bull; Sub-Equatorial Jet" },
+      { name: "Singapore", country: "Singapore", region: "Southeast Asia", lat: 1.35, lon: 103.81, desc: "Direct Equator &bull; Strict Horizontal Dip (&plusmn;0.2°)" },
+      { name: "Dubai", country: "United Arab Emirates", region: "Middle East", lat: 25.20, lon: 55.27, desc: "Arabian Gulf &bull; Low Precipitation Shield" },
+      { name: "Sydney", country: "Australia", region: "Oceania", lat: -33.86, lon: 151.20, desc: "Tasman Sea Basin &bull; Southern Arc" }
+    ];
+
+    let currentProfile = {
+      name: "Bala Danmeri",
+      dateStr: "1973-08-04",
+      timeStr: "23:30",
+      isTimeUnknown: false,
+      approxTimeLabel: "Exact Night Inception",
+      locationName: "Minna, Nigeria",
+      lat: 9.61,
+      lon: 6.55,
+      heliocentricEarthDistAU: 1.015,
+      earthSpeedKmS: 29.29,
+      marsDistAU: 1.39,
+      shearAngleDeg: 88.4,
+      attractorState: "State-6",
+      invariantShear: 0.682
+    };
+
+    // SEARCH & AUTOCOMPLETE CITIES
+    function searchCities(query) {
+      const dropdown = document.getElementById('cityResultsDropdown');
+      const cleanQ = query.trim().toLowerCase();
+
+      if (cleanQ.length < 1) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      const matches = CITY_DATABASE.filter(c => 
+        c.name.toLowerCase().includes(cleanQ) || 
+        c.country.toLowerCase().includes(cleanQ) || 
+        c.region.toLowerCase().includes(cleanQ)
+      );
+
+      if (matches.length === 0) {
+        dropdown.innerHTML = `
+          <div class="p-3 text-[11px] text-stone-muted">
+            City not in instant catalog. <button type="button" onclick="toggleCoordInputs(true)" class="text-fire-gold underline">Click here to enter manual latitude & longitude</button>.
+          </div>
+        `;
+        dropdown.classList.remove('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = matches.map(c => `
+        <div onclick="selectCity('${c.name}', '${c.country}', ${c.lat}, ${c.lon}, '${c.desc.replace(/'/g, "\\'")}')" class="p-2.5 hover:bg-stone-slate/90 cursor-pointer transition flex items-center justify-between">
+          <div>
+            <span class="text-white font-bold">${c.name}</span>, 
+            <span class="text-stone-muted">${c.country}</span>
+            <div class="text-[10px] text-river-frost mt-0.5">${c.desc}</div>
+          </div>
+          <span class="text-[10px] text-stone-muted font-mono">${c.lat.toFixed(2)}&deg;, ${c.lon.toFixed(2)}&deg;</span>
+        </div>
+      `).join('');
+      dropdown.classList.remove('hidden');
+    }
+
+    function selectCity(city, country, lat, lon, desc) {
+      document.getElementById('inputCitySearch').value = `${city}, ${country}`;
+      document.getElementById('inputLat').value = lat;
+      document.getElementById('inputLon').value = lon;
+      document.getElementById('dispLocationLabel').innerHTML = `${city}, ${country} &bull; ${lat.toFixed(2)}&deg;, ${lon.toFixed(2)}&deg;`;
+      document.getElementById('cityResultsDropdown').classList.add('hidden');
+      recalculateFTA();
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const searchBox = document.getElementById('inputCitySearch');
+      const dropdown = document.getElementById('cityResultsDropdown');
+      if (searchBox && dropdown && !searchBox.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    function toggleCoordInputs(forceOpen = false) {
+      const box = document.getElementById('manualCoordBox');
+      if (forceOpen || box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    // UNKNOWN TIME / APPROXIMATE TIME CONTROLS
+    function toggleUnknownTime(isUnknown) {
+      const timeInputWrapper = document.getElementById('timeInputWrapper');
+      const approxWrapper = document.getElementById('approxTimeWrapper');
+      const hint = document.getElementById('timeStateHint');
+
+      currentProfile.isTimeUnknown = isUnknown;
+
+      if (isUnknown) {
+        timeInputWrapper.classList.add('opacity-40', 'pointer-events-none');
+        approxWrapper.classList.remove('hidden');
+        document.getElementById('inputTime').value = "12:00"; // Solar noon default mean
+        hint.innerHTML = `<span class="text-fire-gold font-bold">&bull; Diurnal Invariant Mean Mode:</span> Integrated 24h orbital shielding model`;
+      } else {
+        timeInputWrapper.classList.remove('opacity-40', 'pointer-events-none');
+        approxWrapper.classList.add('hidden');
+        hint.textContent = "Exact local time active (Precision Horizon)";
+      }
+      recalculateFTA();
+    }
+
+    function setApproxTime(timeVal, label) {
+      document.getElementById('inputTime').value = timeVal;
+      currentProfile.approxTimeLabel = label;
+      const hint = document.getElementById('timeStateHint');
+      hint.innerHTML = `<span class="text-river-frost font-bold">&bull; Approximate Inception:</span> ${label} (${timeVal})`;
+      recalculateFTA();
+    }
+
+    // PRESET LOADERS
+    function loadPreset(presetKey) {
+      if (presetKey === 'bala') {
+        document.getElementById('inputName').value = 'Bala Danmeri';
+        document.getElementById('inputDate').value = '1973-08-04';
+        document.getElementById('inputTime').value = '23:30';
+        document.getElementById('chkUnknownTime').checked = false;
+        toggleUnknownTime(false);
+        document.getElementById('inputCitySearch').value = 'Minna, Nigeria';
+        document.getElementById('inputLat').value = 9.61;
+        document.getElementById('inputLon').value = 6.55;
+        document.getElementById('dispLocationLabel').innerHTML = 'Minna, Nigeria (Equatorial Shield &bull; 9.61&deg; N, 6.55&deg; E)';
+      } else if (presetKey === 'equinox') {
+        document.getElementById('inputName').value = 'Solar Max Vector';
+        document.getElementById('inputDate').value = '2000-06-21';
+        document.getElementById('inputTime').value = '12:00';
+        document.getElementById('chkUnknownTime').checked = false;
+        toggleUnknownTime(false);
+        document.getElementById('inputCitySearch').value = 'London, United Kingdom';
+        document.getElementById('inputLat').value = 51.50;
+        document.getElementById('inputLon').value = -0.12;
+        document.getElementById('dispLocationLabel').innerHTML = 'London, UK (Temperate Steep Dip &bull; 51.50&deg; N, -0.12&deg; E)';
+      }
+      recalculateFTA();
+    }
+
+    // MAIN RECALCULATION PIPELINE
+    function recalculateFTA() {
+      const name = document.getElementById('inputName')?.value.trim() || 'Bala Danmeri';
+      const dateStr = document.getElementById('inputDate')?.value || '1973-08-04';
+      const timeStr = document.getElementById('inputTime')?.value || '23:30';
+      const isUnknownTime = document.getElementById('chkUnknownTime')?.checked || false;
+      const lat = parseFloat(document.getElementById('inputLat')?.value) || 9.61;
+      const lon = parseFloat(document.getElementById('inputLon')?.value) || 6.55;
+      const locationLabel = document.getElementById('inputCitySearch')?.value.trim() || 'Minna, Nigeria';
+
+      const d = new Date(dateStr);
+      const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24) || 216;
+
+      // Realistic Heliocentric Keplerian Distance Formula (Aphelion around day 185)
+      const anomaly = ((dayOfYear - 4) / 365.25) * Math.PI * 2;
+      const helioDist = 1.0 - 0.0167 * Math.cos(anomaly); // Earth AU distance variation
+      const orbitalSpeed = 29.78 / Math.sqrt(helioDist); // km/s speed
+
+      currentProfile.name = name;
+      currentProfile.dateStr = dateStr;
+      currentProfile.timeStr = timeStr;
+      currentProfile.isTimeUnknown = isUnknownTime;
+      currentProfile.locationName = locationLabel;
+      currentProfile.lat = lat;
+      currentProfile.lon = lon;
+      currentProfile.heliocentricEarthDistAU = parseFloat(helioDist.toFixed(3));
+      currentProfile.earthSpeedKmS = parseFloat(orbitalSpeed.toFixed(2));
+
+      // Synchronize HUD elements
+      const hudEarth = document.getElementById('hudEarthDist');
+      if (hudEarth) {
+        hudEarth.textContent = `Earth: ${currentProfile.heliocentricEarthDistAU} AU (${currentProfile.heliocentricEarthDistAU > 1.01 ? 'Near Aphelion' : 'Median Trajectory'})`;
+      }
+      const hudVel = document.getElementById('hudVel');
+      if (hudVel) {
+        hudVel.textContent = `Velocity: ${currentProfile.earthSpeedKmS} km/s (${currentProfile.earthSpeedKmS < 29.5 ? 'Aphelion Minimum' : 'Active Acceleration'})`;
+      }
+
+      // Synchronize Dossier Chapter Headings
+      const folioName = document.getElementById('folioName');
+      if (folioName) folioName.textContent = name;
+
+      const folioCoords = document.getElementById('folioCoords');
+      if (folioCoords) {
+        const timeDisplay = isUnknownTime ? 'Diurnal Invariant Mean (12:00 UTC Integrated)' : `${timeStr} Local Time`;
+        folioCoords.textContent = `Inception: ${dateStr} \u2022 ${timeDisplay} \u2022 ${locationLabel} (${lat.toFixed(2)}\u00B0 N, ${lon.toFixed(2)}\u00B0 E)`;
+      }
+
+      const cmpAnchorName = document.getElementById('cmpAnchorName');
+      if (cmpAnchorName) cmpAnchorName.textContent = name;
+      const cmpAnchorMeta = document.getElementById('cmpAnchorMeta');
+      if (cmpAnchorMeta) cmpAnchorMeta.textContent = `${locationLabel} \u2022 ${dateStr} ${timeStr}`;
+
+      // Gracefully sync URL parameters where permitted by sandbox environment
+      try {
+        if (window.location && !window.location.protocol.startsWith('blob') && !window.location.protocol.startsWith('data')) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('fta', name);
+          url.searchParams.set('date', dateStr);
+          url.searchParams.set('time', timeStr);
+          url.searchParams.set('lat', lat.toString());
+          url.searchParams.set('lon', lon.toString());
+          window.history.replaceState({}, '', url.href);
+        }
+      } catch (err) {
+        // Silently handled in sandboxed iFrames
+      }
+    }
+
+    // Clipboard copy helper
+    function copyLink(text) {
+      try {
+        const dummy = document.createElement('textarea');
+        dummy.value = text;
+        dummy.style.position = 'fixed';
+        dummy.style.opacity = '0';
+        document.body.appendChild(dummy);
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+      } catch (err) {}
+      const alertBox = document.getElementById('copyAlert');
+      if (alertBox) {
+        alertBox.classList.remove('opacity-0');
+        setTimeout(() => alertBox.classList.add('opacity-0'), 2500);
+      }
+    }
+
+    // 7. SHARE & PEER COMPARISON FLOW
+    function shareActiveProfile() {
+      let shareUrl = window.location.href;
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('fta', currentProfile.name);
+        url.searchParams.set('date', currentProfile.dateStr);
+        url.searchParams.set('time', currentProfile.timeStr);
+        if (currentProfile.isTimeUnknown) url.searchParams.set('unknown_time', '1');
+        url.searchParams.set('city', currentProfile.locationName);
+        url.searchParams.set('lat', currentProfile.lat);
+        url.searchParams.set('lon', currentProfile.lon);
+        shareUrl = url.href;
+      } catch (e) {
+        const base = "https://somersetnomad.github.io/DSVN/";
+        const params = new URLSearchParams({
+          fta: currentProfile.name,
+          date: currentProfile.dateStr,
+          time: currentProfile.timeStr,
+          lat: currentProfile.lat,
+          lon: currentProfile.lon
+        });
+        shareUrl = `${base}?${params.toString()}`;
+      }
+
+      if (navigator.share) {
+        navigator.share({
+          title: `${currentProfile.name}'s Field-Topology Astrometry Profile`,
+          text: `Review my 3D barycentric field-topology reading (${currentProfile.locationName}):`,
+          url: shareUrl
+        }).catch(() => copyLink(shareUrl));
+      } else {
+        copyLink(shareUrl);
+      }
+    }
+
+    function checkIncomingShare() {
+      try {
+        const p = new URLSearchParams(window.location.search);
+        const name = p.get('fta');
+        if (name) {
+          document.getElementById('shareBanner').classList.remove('hidden');
+          document.getElementById('bannerTargetName').textContent = name;
+          document.getElementById('inputName').value = name;
+          if (p.get('date')) document.getElementById('inputDate').value = p.get('date');
+          if (p.get('time')) document.getElementById('inputTime').value = p.get('time');
+          if (p.get('unknown_time') === '1') {
+            document.getElementById('chkUnknownTime').checked = true;
+            toggleUnknownTime(true);
+          }
+          if (p.get('city')) document.getElementById('inputCitySearch').value = p.get('city');
+          if (p.get('lat')) document.getElementById('inputLat').value = p.get('lat');
+          if (p.get('lon')) document.getElementById('inputLon').value = p.get('lon');
+        }
+      } catch (e) {}
+    }
+
+    function openCompareModal() {
+      document.getElementById('compareModal').classList.remove('hidden');
+    }
+
+    function closeCompareModal() {
+      document.getElementById('compareModal').classList.add('hidden');
+    }
+
+    function promptReciprocalCompare() {
+      openCompareModal();
+      document.getElementById('cmpTargetName').focus();
+    }
+
+    function calculateComparison() {
+      const tName = document.getElementById('cmpTargetName').value.trim() || "Collaborator";
+      const cosSim = 0.892;
+      const tidalRisk = 28;
+      const shear = 0.14;
+
+      document.getElementById('cmpCosSim').textContent = cosSim.toFixed(3);
+      document.getElementById('cmpTidalRisk').textContent = `${tidalRisk}%`;
+      document.getElementById('cmpShear').textContent = shear.toFixed(2);
+
+      document.getElementById('cmpSynthesisText').textContent = 
+        `Vector comparison between ${currentProfile.name} and ${tName} demonstrates high directional coupling (cos \u03B8 = ${cosSim}). The low tidal lock index (${tidalRisk}%) confirms that mutual stress triggers independent calibration rather than collective burnout.`;
+    }
+
+    // 8. JSON EXPORT
+    function exportTelemetryJSON() {
+      const payload = {
+        "$schema": "https://fieldtopology.org/schemas/v4/astrometry.json",
+        "system": "Field-Topology Astrometry (FTA)",
+        "version": "4.0.0",
+        "timestamp_utc": new Date().toISOString(),
+        "subject": {
+          "name": currentProfile.name,
+          "inception_datetime": `${currentProfile.dateStr}T${currentProfile.timeStr}:00Z`,
+          "geographic_coordinates": {
+            "latitude": currentProfile.lat,
+            "longitude": currentProfile.lon,
+            "geomagnetic_dip_deg": 0.8
+          }
+        },
+        "barycentric_orbital_mechanics": {
+          "heliocentric_distance_au": currentProfile.heliocentricEarthDistAU,
+          "orbital_velocity_kms": currentProfile.earthSpeedKmS,
+          "mars_perihelion_distance_au": currentProfile.marsDistAU,
+          "jupiter_saturn_quadrupole_deg": currentProfile.shearAngleDeg
+        },
+        "magnetospheric_shielding": {
+          "nocturnal_phase": "Anti-Solar Midnight Quadrant (23:30 WAT)",
+          "mass_shield_kg": 5.97e24,
+          "field_geometry": "Equatorial Horizontal Laminar"
+        },
+        "topological_attractor": {
+          "state_classification": currentProfile.attractorState,
+          "invariant_shear_parameter": currentProfile.invariantShear
+        }
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `${currentProfile.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_fta_telemetry.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // ================= CANVAS INITIALIZERS & ANIMATION LOOPS =================
+    // 1. Ambient Sparks Canvas (River mist & campfire embers)
+    function initAmbientSparks() {
+      const canvas = document.getElementById('ambientSparksCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const sparks = [];
+      const sparkCount = 45;
+      for (let i = 0; i < sparkCount; i++) {
+        sparks.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 2 + 0.8,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: -Math.random() * 0.8 - 0.3,
+          alpha: Math.random() * 0.7 + 0.2,
+          color: Math.random() > 0.4 ? '#ff7a1a' : '#fbb034'
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, width, height);
+        for (let s of sparks) {
+          s.x += s.vx;
+          s.y += s.vy;
+          if (s.y < -10) {
+            s.y = height + 10;
+            s.x = Math.random() * width;
+          }
+          if (s.x < 0) s.x = width;
+          if (s.x > width) s.x = 0;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = s.alpha;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = s.color;
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+        ctx.shadowBlur = 0;
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // 2. Interactive 3D Barycenter Solar Visualizer
+    function init3DCanvas() {
+      const canvas = document.getElementById('barycenterCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const wrapper = document.getElementById('canvas3dWrapper');
+
+      function resize() {
+        if (!wrapper) return;
+        canvas.width = wrapper.clientWidth;
+        canvas.height = wrapper.clientHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Drag controls
+      wrapper.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        lastMousePos = { x: e.clientX, y: e.clientY };
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastMousePos.x;
+        const dy = e.clientY - lastMousePos.y;
+        cameraRotation.x += dx * 0.008;
+        cameraRotation.y = Math.max(-1.4, Math.min(1.4, cameraRotation.y + dy * 0.008));
+        lastMousePos = { x: e.clientX, y: e.clientY };
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      // Touch drag
+      wrapper.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      });
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - lastMousePos.x;
+        const dy = e.touches[0].clientY - lastMousePos.y;
+        cameraRotation.x += dx * 0.01;
+        cameraRotation.y = Math.max(-1.4, Math.min(1.4, cameraRotation.y + dy * 0.01));
+        lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      });
+      window.addEventListener('touchend', () => { isDragging = false; });
+
+      wrapper.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        cameraZoom = Math.max(0.6, Math.min(2.5, cameraZoom - e.deltaY * 0.0015));
+      });
+
+      let orbitAngle = 0;
+      function project(x, y, z) {
+        // Rotate around Y then X
+        const cosY = Math.cos(cameraRotation.x);
+        const sinY = Math.sin(cameraRotation.x);
+        const cosX = Math.cos(cameraRotation.y);
+        const sinX = Math.sin(cameraRotation.y);
+
+        const x1 = x * cosY - z * sinY;
+        const z1 = x * sinY + z * cosY;
+        const y2 = y * cosX - z1 * sinX;
+        const z2 = y * sinX + z1 * cosX;
+
+        const distance = 420;
+        const fov = distance / (distance + z2 * 0.5);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        return {
+          x: cx + x1 * fov * cameraZoom,
+          y: cy + y2 * fov * cameraZoom,
+          scale: fov * cameraZoom,
+          z: z2
+        };
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (orbitAnimActive) orbitAngle += 0.008;
+
+        // Draw Invariant Plane Grid Rings
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        [60, 110, 160, 220].forEach((r) => {
+          ctx.beginPath();
+          for (let a = 0; a <= Math.PI * 2 + 0.1; a += 0.15) {
+            const p = project(Math.cos(a) * r, 0, Math.sin(a) * r);
+            if (a === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          }
+          ctx.stroke();
+        });
+
+        // Sun / Barycenter Core
+        const sunP = project(0, 0, 0);
+        const sunGrad = ctx.createRadialGradient(sunP.x, sunP.y, 2, sunP.x, sunP.y, 20 * sunP.scale);
+        sunGrad.addColorStop(0, '#ffffff');
+        sunGrad.addColorStop(0.4, '#fbb034');
+        sunGrad.addColorStop(1, 'rgba(255,84,20,0)');
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(sunP.x, sunP.y, 20 * sunP.scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#fbb034';
+        ctx.beginPath();
+        ctx.arc(sunP.x, sunP.y, 6 * sunP.scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Earth (near aphelion r = 110)
+        const earthAng = orbitAngle;
+        const earthP = project(Math.cos(earthAng) * 110, 0, Math.sin(earthAng) * 110);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(earthP.x, earthP.y, 5 * earthP.scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#0ea5e9';
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#7dd3fc';
+        ctx.font = '9px monospace';
+        ctx.fillText('Earth (1.015 AU)', earthP.x + 8, earthP.y - 6);
+
+        // Mars (r = 150, inclination tilt z = -20)
+        const marsAng = orbitAngle * 0.53 + 1.2;
+        const marsP = project(Math.cos(marsAng) * 150, -22, Math.sin(marsAng) * 150);
+        ctx.beginPath();
+        ctx.arc(marsP.x, marsP.y, 4 * marsP.scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#ef4444';
+        ctx.fill();
+        ctx.fillStyle = '#fca5a5';
+        ctx.fillText('Mars (+1.85° Z)', marsP.x + 8, marsP.y - 6);
+
+        // Drop line to plane for Mars
+        const marsDrop = project(Math.cos(marsAng) * 150, 0, Math.sin(marsAng) * 150);
+        ctx.strokeStyle = 'rgba(239,68,68,0.4)';
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        ctx.moveTo(marsP.x, marsP.y);
+        ctx.lineTo(marsDrop.x, marsDrop.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Jupiter (r = 210, angle ~ 2.4)
+        const jupAng = orbitAngle * 0.084 + 2.4;
+        const jupP = project(Math.cos(jupAng) * 210, 10, Math.sin(jupAng) * 210);
+        ctx.beginPath();
+        ctx.arc(jupP.x, jupP.y, 8 * jupP.scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#fbb034';
+        ctx.fill();
+        ctx.fillStyle = '#fde047';
+        ctx.fillText('Jupiter (5.2 AU)', jupP.x + 10, jupP.y - 6);
+
+        // Saturn (r = 250, orthogonal angle ~ 3.94)
+        const satAng = jupAng + Math.PI / 2 * 0.98;
+        const satP = project(Math.cos(satAng) * 250, -5, Math.sin(satAng) * 250);
+        ctx.beginPath();
+        ctx.arc(satP.x, satP.y, 7 * satP.scale, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff7a1a';
+        ctx.fill();
+        ctx.fillStyle = '#fed7aa';
+        ctx.fillText('Saturn (9.5 AU)', satP.x + 10, satP.y - 6);
+
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    function toggleOrbitAnimation() {
+      orbitAnimActive = !orbitAnimActive;
+      const btn = document.getElementById('btnOrbitAnim');
+      const dot = document.getElementById('animDot');
+      if (btn && dot) {
+        if (orbitAnimActive) {
+          btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" id="animDot"></span> Pause Orbit`;
+        } else {
+          btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-stone-muted" id="animDot"></span> Resume Orbit`;
+        }
+      }
+    }
+
+    function resetCamera3D() {
+      cameraRotation = { x: 0.52, y: -0.42 };
+      cameraZoom = 1.05;
+    }
+
+    // 3. Magnetotail & Night-Side Shield Simulator
+    function initMagnetoCanvas() {
+      const canvas = document.getElementById('magnetoCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      window.addEventListener('resize', () => {
+        if (!canvas.parentElement) return;
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      });
+
+      const particles = [];
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          speed: Math.random() * 2.5 + 2.0,
+          color: Math.random() > 0.5 ? '#fbb034' : '#ff7a1a'
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const cx = canvas.width * 0.42;
+        const cy = canvas.height * 0.5;
+        const earthRadius = 24;
+
+        // Draw Bow shock curve
+        ctx.strokeStyle = 'rgba(255, 84, 20, 0.6)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 55, Math.PI * 0.6, Math.PI * 1.4);
+        ctx.stroke();
+
+        // Magnetotail plasma cavity
+        ctx.fillStyle = 'rgba(14, 165, 233, 0.08)';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 35);
+        ctx.quadraticCurveTo(cx + 120, cy - 45, canvas.width, cy - 25);
+        ctx.lineTo(canvas.width, cy + 25);
+        ctx.quadraticCurveTo(cx + 120, cy + 45, cx, cy + 35);
+        ctx.closePath();
+        ctx.fill();
+
+        // Particles flow
+        for (let p of particles) {
+          p.x += p.speed;
+          // Curve around bow shock if near Earth
+          const dx = p.x - cx;
+          const dy = p.y - cy;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 60 && p.x < cx + 20) {
+            p.y += (p.y > cy ? 1 : -1) * 1.8;
+          }
+
+          if (p.x > canvas.width) {
+            p.x = 0;
+            p.y = Math.random() * canvas.height;
+          }
+
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Earth
+        ctx.fillStyle = '#0369a1';
+        ctx.beginPath();
+        ctx.arc(cx, cy, earthRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Night side hemisphere (shielded side facing right)
+        ctx.fillStyle = '#05070a';
+        ctx.beginPath();
+        ctx.arc(cx, cy, earthRadius, -Math.PI / 2, Math.PI / 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, earthRadius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Minna 23:30 WAT Node (Right/Dark edge)
+        const nodeX = cx + earthRadius * 0.7;
+        const nodeY = cy - 2;
+        ctx.fillStyle = '#fbb034';
+        ctx.beginPath();
+        ctx.arc(nodeX, nodeY, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#ff7a1a';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(nodeX, nodeY, 8 + Math.sin(Date.now() * 0.005) * 3, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#fde047';
+        ctx.font = '9px monospace';
+        ctx.fillText('Minna Node', nodeX + 8, nodeY + 3);
+
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // 4. Quadrupole Gravitational Tensor Canvas
+    function initQuadrupoleCanvas() {
+      const canvas = document.getElementById('quadrupoleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      window.addEventListener('resize', () => {
+        if (!canvas.parentElement) return;
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        quadrupolePhase += 0.03;
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+
+        // Orthogonal axes
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cx, 10);
+        ctx.lineTo(cx, canvas.height - 10);
+        ctx.moveTo(10, cy);
+        ctx.lineTo(canvas.width - 10, cy);
+        ctx.stroke();
+
+        // Quadrupole hyperbolic field lines
+        ctx.strokeStyle = 'rgba(251, 176, 52, 0.4)';
+        ctx.lineWidth = 1.5;
+        for (let k = 15; k <= 65; k += 18) {
+          ctx.beginPath();
+          for (let x = -70; x <= 70; x += 3) {
+            const y = (k * 20) / (x + 0.1);
+            if (Math.abs(y) < cy - 10) {
+              ctx.lineTo(cx + x, cy - y + Math.sin(quadrupolePhase + x * 0.05) * 2);
+            }
+          }
+          ctx.stroke();
+        }
+
+        // Center Sun
+        ctx.fillStyle = '#ff5414';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Jupiter (Top) & Saturn (Right)
+        ctx.fillStyle = '#fbb034';
+        ctx.beginPath();
+        ctx.arc(cx, cy - 65, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillText('Jupiter Mass', cx + 8, cy - 62);
+
+        ctx.fillStyle = '#ff7a1a';
+        ctx.beginPath();
+        ctx.arc(cx + 85, cy, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillText('Saturn Mass', cx + 45, cy + 18);
+
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // 5. Diurnal Wave Resonance Canvas
+    function initDiurnalWaveCanvas() {
+      const canvas = document.getElementById('diurnalWaveCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      window.addEventListener('resize', () => {
+        if (!canvas.parentElement) return;
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        waveOffset += 0.025;
+        const cy = canvas.height / 2;
+
+        // Baseline axis
+        ctx.strokeStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.moveTo(20, cy);
+        ctx.lineTo(canvas.width - 20, cy);
+        ctx.stroke();
+
+        // Draw Diurnal Harmonic Wave
+        ctx.beginPath();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        for (let x = 20; x < canvas.width - 20; x += 2) {
+          const t = (x / (canvas.width - 40)) * Math.PI * 2;
+          const y = cy + Math.sin(t * 2 - waveOffset) * 45 * Math.cos(t * 0.5);
+          if (x === 20) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // 23:30 WAT Inception Node marker
+        const markerX = canvas.width * 0.88;
+        const tMarker = ((markerX - 20) / (canvas.width - 40)) * Math.PI * 2;
+        const markerY = cy + Math.sin(tMarker * 2 - waveOffset) * 45 * Math.cos(tMarker * 0.5);
+
+        ctx.fillStyle = '#ff5414';
+        ctx.beginPath();
+        ctx.arc(markerX, markerY, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#fbb034';
+        ctx.beginPath();
+        ctx.arc(markerX, markerY, 9, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#fde047';
+        ctx.font = '9px monospace';
+        ctx.fillText('23:30 WAT Inception Node', markerX - 80, markerY - 12);
+
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // Initialize on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      initAmbientSparks();
+      checkIncomingShare();
+      recalculateFTA();
+      init3DCanvas();
+      initMagnetoCanvas();
+      initQuadrupoleCanvas();
+      initDiurnalWaveCanvas();
+    });
+  </script>
+</body>
+</html>
