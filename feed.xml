@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Field-Topology Astrometry: Blog</title>
+    <link>https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/blog/</link>
+    <atom:link href="https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Plain guides to the real astronomy of a birth moment, and how Bala Danmeri&#x27;s Field-Topology Astrometry framework reads it.</description>
+    <language>en-gb</language>
+    <managingEditor>info@baladanmeri.com (Bala Danmeri)</managingEditor>
+    <lastBuildDate>Thu, 29 Oct 2026 09:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Where Were the Planets on the Day You Were Born?</title>
+      <link>https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html</link>
+      <guid isPermaLink="true">https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html</guid>
+      <pubDate>Thu, 29 Oct 2026 09:00:00 +0000</pubDate>
+      <dc:creator>Bala Danmeri</dc:creator>
+      <description>How to see where Earth, Mars, Jupiter and Saturn really were around the Sun on your birthday: free NASA-based tools, a worked example, real numbers.</description>
+    </item>
+  </channel>
+</rss>

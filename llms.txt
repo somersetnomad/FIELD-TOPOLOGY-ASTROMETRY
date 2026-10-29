@@ -3,6 +3,7 @@
 > A free browser calculator and a £275 commissioned monograph by Bala Danmeri (Wincanton, Somerset, UK). The calculator shows the real heliocentric astronomy of a birth moment: Earth's distance from the Sun and orbital speed, and the positions of Mars, Jupiter and Saturn, from JPL's approximate Keplerian elements. The monograph reads that astronomy through FTA, Bala Danmeri's interpretive framework. The astronomy is calculated; the interpretation is a philosophical framework, not established science.
 
 ## Pages
+- [Blog](https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/blog/): all guides, newest first; RSS at https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/feed.xml
 - [FTA calculator and sample monograph](https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/): interactive 3D view plus Bala Danmeri's own ten-chapter monograph as a worked example
 - [Where were the planets on the day you were born?](https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html): free NASA-based tools, Earth's distance and speed by month, a worked example
 - [Commission a monograph (£275)](https://tally.so/r/ArrMak): order form with card payment
