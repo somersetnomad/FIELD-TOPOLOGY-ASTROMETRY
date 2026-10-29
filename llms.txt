@@ -4,6 +4,7 @@
 
 ## Pages
 - [FTA calculator and sample monograph](https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/): interactive 3D view plus Bala Danmeri's own ten-chapter monograph as a worked example
+- [Where were the planets on the day you were born?](https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html): free NASA-based tools, Earth's distance and speed by month, a worked example
 - [Commission a monograph (£275)](https://tally.so/r/ArrMak): order form with card payment
 - [Author](https://baladanmeri.com/): Bala Danmeri, writer of science fiction and metaphysical philosophy
 

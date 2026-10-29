@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where Were the Planets on the Day You Were Born?</title>
+  <meta name="description" content="How to see where Earth, Mars, Jupiter and Saturn really were around the Sun on your birthday: free NASA-based tools, a worked example, real numbers.">
+  <link rel="canonical" href="https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html">
+  <meta name="author" content="Bala Danmeri">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Where Were the Planets on the Day You Were Born?">
+  <meta property="og:description" content="Free NASA-based ways to see the real solar system on your birthday, with a worked example and Earth's distance and speed through the year.">
+  <meta property="og:url" content="https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html">
+  <meta property="og:site_name" content="Field-Topology Astrometry">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a0f'/%3E%3Cpath d='M16 4C16 4 24 12 24 19C24 23.4 20.4 27 16 27C11.6 27 8 23.4 8 19C8 12 16 4 16 4Z' fill='%23ff5414'/%3E%3Cpath d='M16 9C16 9 21 14.5 21 19C21 21.8 18.8 24 16 24C13.2 24 11 21.8 11 19C11 14.5 16 9 16 9Z' fill='%23fbb034'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "Where Were the Planets on the Day You Were Born?",
+        "description": "How to see where Earth, Mars, Jupiter and Saturn really were around the Sun on your birthday, with free NASA-based tools, a worked example and real numbers.",
+        "datePublished": "2026-10-29",
+        "dateModified": "2026-10-29",
+        "inLanguage": "en-GB",
+        "mainEntityOfPage": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/guides/planets-on-the-day-you-were-born.html",
+        "author": {"@type": "Person", "name": "Bala Danmeri", "url": "https://baladanmeri.com/"},
+        "publisher": {"@type": "Person", "name": "Bala Danmeri", "url": "https://baladanmeri.com/"}
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {"@type": "Question", "name": "Does my time of birth matter for the planets' positions?",
+           "acceptedAnswer": {"@type": "Answer", "text": "Very little for the planets around the Sun. In a day Earth moves about 1 degree of its orbit and Saturn about 0.03 degrees, so the date does almost all the work. Time and place matter for anything seen from your spot on Earth, such as whether it was day or night."}},
+          {"@type": "Question", "name": "Were the planets aligned on my birthday?",
+           "acceptedAnswer": {"@type": "Answer", "text": "Almost certainly not in a straight line. The planets orbit at different speeds and slightly different tilts, so a true line-up does not happen. What you can check is the angle between any two planets as seen from the Sun."}},
+          {"@type": "Question", "name": "How far have I travelled around the Sun since I was born?",
+           "acceptedAnswer": {"@type": "Answer", "text": "One trip around the Sun is roughly 940 million kilometres. Multiply by your age in years: a 50-year-old has gone round about 47 billion kilometres."}},
+          {"@type": "Question", "name": "Is this the same as my star sign?",
+           "acceptedAnswer": {"@type": "Answer", "text": "No. A star sign describes where the Sun appeared against the sky as seen from Earth. The view here is from the Sun's side: where Earth and the other planets actually were in their orbits, with distances and speeds."}}
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root { --void:#05070a; --abyss:#090d14; --slate:#111723; --border:#1e293b; --muted:#94a3b8; --text:#e2e8f0; --ember:#ff5414; --gold:#fbb034; --frost:#7dd3fc; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--void); color:var(--text); font:17px/1.7 Inter, system-ui, sans-serif; }
+    a { color:var(--frost); }
+    header.site { border-bottom:1px solid var(--border); padding:14px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; max-width:760px; margin:0 auto; }
+    header.site a.brand { font-family:Cinzel, serif; color:#fff; text-decoration:none; letter-spacing:.06em; font-size:15px; }
+    header.site a.cta { background:var(--ember); color:#fff; text-decoration:none; padding:6px 12px; border-radius:8px; font-size:14px; font-weight:600; }
+    main { max-width:760px; margin:0 auto; padding:24px 16px 64px; }
+    .crumb { font:500 12px/1.4 "JetBrains Mono", monospace; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+    h1 { font-family:Cinzel, serif; font-size:clamp(28px, 6vw, 40px); line-height:1.2; margin:.3em 0 .5em; color:#fff; }
+    h2 { font-size:23px; line-height:1.3; margin:2em 0 .5em; color:#fff; }
+    h3 { font-size:18px; margin:1.4em 0 .3em; color:var(--gold); }
+    .lede { font-size:19px; color:#fff; }
+    .byline { color:var(--muted); font-size:14px; }
+    table { width:100%; border-collapse:collapse; margin:1em 0; font-size:15px; }
+    th, td { border-bottom:1px solid var(--border); padding:8px 6px; text-align:left; }
+    th { color:var(--gold); font-weight:600; }
+    td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+    .table-wrap { overflow-x:auto; }
+    .note { background:var(--slate); border-left:3px solid var(--ember); padding:12px 16px; border-radius:0 10px 10px 0; margin:1.2em 0; }
+    ol li, ul li { margin:.35em 0; }
+    .box { background:var(--abyss); border:1px solid var(--border); border-radius:14px; padding:18px 20px; margin:2.2em 0; }
+    .box a.btn { display:inline-block; margin:8px 10px 0 0; padding:9px 14px; border-radius:9px; text-decoration:none; font-weight:600; }
+    .btn.primary { background:linear-gradient(90deg, var(--ember), var(--gold)); color:var(--void); }
+    .btn.secondary { border:1px solid var(--frost); color:var(--frost); }
+    footer { color:var(--muted); font-size:14px; border-top:1px solid var(--border); padding-top:16px; margin-top:40px; }
+    caption { caption-side:bottom; color:var(--muted); font-size:13px; text-align:left; padding-top:6px; }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <a class="brand" href="../">Field-Topology Astrometry</a>
+    <a class="cta" href="https://tally.so/r/ArrMak" target="_blank" rel="noopener">Commission a monograph</a>
+  </header>
+
+  <main>
+    <article>
+      <div class="crumb"><a href="../">FTA</a> / Guides</div>
+      <h1>Where were the planets on the day you were born?</h1>
+      <p class="byline">By Bala Danmeri &middot; 29 October 2026</p>
+
+      <p class="lede">You can find out exactly, for free, from the same orbital data NASA's Jet Propulsion Laboratory publishes. Enter your birth date and time (converted to UTC) into a calculator built on that data and you get where Earth and every other planet stood in its orbit around the Sun. On any birthday Earth is somewhere between about 147 and 152 million kilometres from the Sun, moving at between 29.3 and 30.3 kilometres a second, and the other planets are spread around their own orbits at angles you can measure.</p>
+
+      <p>I find this a quiet thing to look at. Most of us know our star sign. Very few of us know where our own planet actually was the night we arrived. The rest of this guide shows how to check, what the numbers mean, and where measurement stops and interpretation begins.</p>
+
+      <h2>What does "where were the planets" actually mean?</h2>
+      <p>There are two honest answers, and it helps to know which one you are asking.</p>
+      <p><strong>From Earth, looking out.</strong> This is the view a horoscope uses. Each planet is placed by the direction it appeared in against the background sky, seen from Earth. Distance is left out.</p>
+      <p><strong>From the Sun, looking at the whole system.</strong> This is the heliocentric view. Each planet sits in its real orbit, with its real distance from the Sun and its speed. This is what the posters and orrery tools show, and it is what I mean in this guide.</p>
+      <p>Both are correct. They simply answer different questions. The second one is the one most people picture when they ask what the solar system looked like on their birthday.</p>
+
+      <h2>How do I check the solar system on my birthday?</h2>
+      <ol>
+        <li><strong>Convert your birth time to UTC.</strong> Astronomical tools work in Universal Time. If you were born at 23:30 in Lagos (UTC+1), that is 22:30 UTC. Many free tools quietly default to the current time if you skip this, which catches people out.</li>
+        <li><strong>Choose a tool.</strong> Three I would trust:
+          <ul>
+            <li><a href="../">The FTA calculator</a> on this site. It works out Earth's distance and speed, Mars's distance and tilt, and the angle between Jupiter and Saturn, using JPL's published orbital elements. It runs in your browser and stores nothing.</li>
+            <li><a href="https://fourmilab.ch/solar">Solar System Live</a>, John Walker's long-running free orrery. It draws the whole system from above for any date.</li>
+            <li><a href="https://ssd.jpl.nasa.gov/horizons/">JPL Horizons</a>, NASA's own ephemeris service. It is the most precise of the three and the least friendly, but it will give you any position, distance or speed you ask for.</li>
+          </ul>
+        </li>
+        <li><strong>Read the few numbers that matter.</strong> Earth's distance from the Sun, Earth's orbital speed, and the angle around the Sun between the planets you care about. Everything else is detail.</li>
+      </ol>
+
+      <h2>How far was Earth from the Sun in my birth month?</h2>
+      <p>Earth's orbit is a slightly stretched circle. It is nearest the Sun in early January (perihelion) and farthest in early July (aphelion), a difference of about 5 million kilometres. <a href="https://apod.nasa.gov/apod/ap250104.html">NASA's Astronomy Picture of the Day</a> gives the same round figures: about 147 million km in January and about 152 million km in July.</p>
+      <p>I calculated the table below for the 15th of each month using the IAU's standard Earth-position routine. The figures barely change from one year to the next, so it works for any birthday.</p>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Month</th><th class="num">Distance (million km)</th><th class="num">Distance (AU)</th><th class="num">Speed (km/s)</th></tr></thead>
+        <tbody>
+          <tr><td>January</td><td class="num">147.2</td><td class="num">0.984</td><td class="num">30.28</td></tr>
+          <tr><td>February</td><td class="num">147.8</td><td class="num">0.988</td><td class="num">30.17</td></tr>
+          <tr><td>March</td><td class="num">148.8</td><td class="num">0.994</td><td class="num">29.96</td></tr>
+          <tr><td>April</td><td class="num">150.1</td><td class="num">1.003</td><td class="num">29.70</td></tr>
+          <tr><td>May</td><td class="num">151.2</td><td class="num">1.011</td><td class="num">29.48</td></tr>
+          <tr><td>June</td><td class="num">151.9</td><td class="num">1.016</td><td class="num">29.33</td></tr>
+          <tr><td>July</td><td class="num">152.1</td><td class="num">1.017</td><td class="num">29.31</td></tr>
+          <tr><td>August</td><td class="num">151.5</td><td class="num">1.013</td><td class="num">29.42</td></tr>
+          <tr><td>September</td><td class="num">150.5</td><td class="num">1.006</td><td class="num">29.62</td></tr>
+          <tr><td>October</td><td class="num">149.2</td><td class="num">0.997</td><td class="num">29.87</td></tr>
+          <tr><td>November</td><td class="num">148.0</td><td class="num">0.989</td><td class="num">30.11</td></tr>
+          <tr><td>December</td><td class="num">147.3</td><td class="num">0.984</td><td class="num">30.26</td></tr>
+        </tbody>
+        <caption>Earth's distance from the Sun and orbital speed on the 15th of each month. Calculated with the IAU SOFA/ERFA epv00 routine. 1 AU = 149.6 million km.</caption>
+      </table>
+      </div>
+      <p>Notice that speed and distance move in opposite directions. Earth goes fastest when it is closest to the Sun and slowest when it is farthest away. Kepler worked this out four centuries ago. A winter birthday in the northern hemisphere is a fast, near-Sun birthday. A summer one is slow and far.</p>
+
+      <h2>A worked example: 4 August 1973</h2>
+      <p>Here is my own birth moment, 23:30 local time in Minna, Nigeria, which is 22:30 UTC. I use it because I know the time is right, and because checking it properly taught me something. An earlier version of my own monograph had some of these figures wrong. When I recalculated them against the reference routines, I corrected them. I mention this only so that you check your numbers too.</p>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Body</th><th>Where it was</th></tr></thead>
+        <tbody>
+          <tr><td>Earth</td><td>1.014 AU (151.7 million km) from the Sun, moving at 29.36 km/s. Aphelion had passed a month earlier, on 4 July.</td></tr>
+          <tr><td>Mars</td><td>1.38 AU from the Sun. Mars was at perihelion, the nearest point of its own orbit, that very month, and sat about 1.7&deg; below the plane of Earth's orbit.</td></tr>
+          <tr><td>Jupiter</td><td>About 308&deg; around the Sun (heliocentric ecliptic longitude), 5.09 AU out.</td></tr>
+          <tr><td>Saturn</td><td>About 86&deg; around the Sun, 9.02 AU out. So Jupiter and Saturn were roughly 138&deg; apart.</td></tr>
+        </tbody>
+        <caption>Calculated from JPL's approximate Keplerian elements and checked against the IAU ERFA routines.</caption>
+      </table>
+      </div>
+      <p>Put plainly: Earth was near its slowest, Mars was near its fastest, and the two giants were spread wide apart. Nothing exotic. But it is a real arrangement, and it is mine.</p>
+
+      <h2>How accurate is a free birthday calculator?</h2>
+      <p>Accurate enough for anything a person would do with it. JPL publishes a set of <a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">approximate orbital elements</a> for the major planets, valid from 1800 to 2050. JPL's own stated error over that span is around 40 arcseconds in position for Mars and about 10 arcminutes for Saturn. For scale, the full Moon is about 30 arcminutes across. So these figures are good to a small fraction of the Moon's width, which is far finer than any reading needs. If you want more precision than that, JPL Horizons gives it.</p>
+      <p>The bigger source of error is usually the birth time itself, and for the planets around the Sun even that hardly matters. In one day Earth moves about one degree of its orbit and Saturn about three-hundredths of a degree.</p>
+
+      <h2>What do the numbers mean?</h2>
+      <p>This is where I want to be careful, because it is easy to slide from one kind of statement to another.</p>
+      <p>The positions, distances and speeds above are astronomy. Anyone can recompute them and get the same answer. What they mean for a person, whether a slow near-aphelion birth says something about temperament, is NOT something astronomy can tell you. That is interpretation.</p>
+      <p>Field-Topology Astrometry is my own interpretive framework. It starts from these real numbers rather than from the flat twelve-sign circle, and then reads them, the way a poet might read a landscape. I think the starting point matters. Something in me says that if we are going to ask what the sky meant at our beginning, we should at least begin with the sky as it actually was. But the reading itself is philosophy, and I would rather you held it lightly than took my word as science.</p>
+
+      <h2>Frequently asked questions</h2>
+      <h3>Does my time of birth matter for the planets' positions?</h3>
+      <p>Very little for the planets around the Sun. The date does almost all the work. Time and place matter for anything seen from your spot on Earth, such as whether it was day or night where you were born, or which planets were above the horizon.</p>
+      <h3>Were the planets aligned on my birthday?</h3>
+      <p>Almost certainly not in a straight line. The planets travel at different speeds and on slightly different tilts, so a true line-up does not happen. What you can check is the angle between any two planets as seen from the Sun. Jupiter and Saturn, for instance, come together roughly every twenty years; their recent meetings were in 1961, 1981, 2000 and 2020.</p>
+      <h3>How far have I travelled around the Sun since I was born?</h3>
+      <p>One trip around the Sun is roughly 940 million kilometres. Multiply by your age. At 53 I have gone round about 50 billion kilometres.</p>
+      <h3>Is this the same as my star sign?</h3>
+      <p>No. A star sign describes where the Sun appeared against the sky as seen from Earth. This guide is about the view from the Sun's side: where Earth and the other planets actually were in their orbits.</p>
+
+      <div class="box">
+        <strong>See your own birth moment.</strong>
+        <p style="margin:.4em 0 0">The free calculator gives you Earth's distance and speed, Mars, and the Jupiter&ndash;Saturn angle for your date. If you would like the full ten-chapter reading written for you, the monograph is &pound;275.</p>
+        <a class="btn primary" href="../">Open the calculator</a>
+        <a class="btn secondary" href="https://tally.so/r/ArrMak" target="_blank" rel="noopener">Commission a monograph</a>
+      </div>
+
+      <h2>Sources</h2>
+      <ul>
+        <li>NASA JPL Solar System Dynamics, <a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">Approximate Positions of the Planets</a> (orbital elements and error estimates, 1800&ndash;2050).</li>
+        <li>NASA JPL, <a href="https://ssd.jpl.nasa.gov/horizons/">Horizons System</a> (precise ephemerides).</li>
+        <li>NASA, <a href="https://apod.nasa.gov/apod/ap250104.html">Astronomy Picture of the Day, 4 January 2025</a> (perihelion and aphelion distances).</li>
+        <li>John Walker, <a href="https://fourmilab.ch/solar">Solar System Live</a> (free orrery).</li>
+        <li>IAU SOFA / ERFA routines epv00 and plan94, used for the monthly table and the worked example.</li>
+      </ul>
+    </article>
+
+    <footer>
+      <p><strong>About the author.</strong> Bala Danmeri lives in Wincanton, Somerset, and writes science fiction and metaphysical philosophy. Field-Topology Astrometry is his framework for reading the real astronomy of a birth moment. <a href="https://baladanmeri.com/">baladanmeri.com</a> &middot; <a href="mailto:info@baladanmeri.com">info@baladanmeri.com</a></p>
+      <p><a href="../">&larr; Back to the FTA calculator</a></p>
+    </footer>
+  </main>
+</body>
+</html>

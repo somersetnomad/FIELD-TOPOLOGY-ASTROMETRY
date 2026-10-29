@@ -1,1 +1,9 @@
 id,query,cluster,intent,ai_prompt,priority,status,url,published,last_checked
+1,where were the planets on the day I was born,birth-sky,informational+tool,"Where were the planets in the solar system on the day I was born, and how can I check?",60,in_review,/guides/planets-on-the-day-you-were-born.html,,2026-10-29
+2,earth distance from the sun on my birthday,birth-sky,informational+tool,"How far was Earth from the Sun on my birthday?",48,queued,,,2026-10-29
+3,born near aphelion or perihelion meaning,birth-sky,informational,"Does it mean anything to be born when Earth is farthest from the Sun?",45,queued,,,2026-10-29
+4,heliocentric birth chart vs geocentric,fta-method,informational,"What is a heliocentric birth chart and how is it different from a normal horoscope?",40,queued,,,2026-10-29
+5,what is field-topology astrometry,fta-method,navigational/commercial,"What is Field-Topology Astrometry?",36,queued,,,2026-10-29
+6,jupiter saturn angle the year I was born,birth-sky,informational+tool,"Where were Jupiter and Saturn relative to each other when I was born?",30,queued,,,2026-10-29
+7,why your zodiac sign is wrong precession,fta-method,informational,"Has precession changed my zodiac sign?",18,queued,,,2026-10-29
+8,mars perihelion opposition years list,birth-sky,informational,"When is Mars closest to the Sun and to Earth?",16,queued,,,2026-10-29
