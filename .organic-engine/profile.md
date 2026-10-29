@@ -9,3 +9,4 @@
 - Mode: review (first 3 articles via PR). Cadence: 2/week max, never more than 1/day.
 - Voice: owner's seeker-voice skill / The Patient Sky voice; candid, plain, spiritually literate.
 - Owner facts on record: born 4 Aug 1973, 23:30 WAT, Minna, Nigeria (published on the site by the owner).
+- Blog: listing at /blog/, RSS 2.0 at /feed.xml, both generated with `python3 .organic-engine/build_blog.py` (also rebuilds sitemap.xml). Run it after adding or editing any guide in /guides/; each guide must carry <title>, meta description, canonical and JSON-LD Article with datePublished/dateModified.
