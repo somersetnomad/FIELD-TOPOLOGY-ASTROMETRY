@@ -3,7 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Field-Topology Astrometry (FTA) &bull; Barycentric Invariant Engine &amp; Master Treatise</title>
+  <title>Field-Topology Astrometry: 3D Birth-Sky Calculator</title>
+  <meta name="description" content="See where Earth, Mars, Jupiter and Saturn really were at your birth: orbital distance, speed and 3D geometry, read through Bala Danmeri's FTA framework.">
+  <link rel="canonical" href="https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/">
+  <meta name="author" content="Bala Danmeri">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Field-Topology Astrometry: 3D Birth-Sky Calculator">
+  <meta property="og:description" content="The real 3D astronomy of your birth moment, read through Bala Danmeri's Field-Topology Astrometry framework.">
+  <meta property="og:url" content="https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/">
+  <meta property="og:site_name" content="Field-Topology Astrometry">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/#app",
+        "name": "Field-Topology Astrometry",
+        "url": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/",
+        "applicationCategory": "ReferenceApplication",
+        "operatingSystem": "Any (web browser)",
+        "description": "Browser calculator for Earth's orbital distance and speed and the heliocentric positions of Mars, Jupiter and Saturn at a birth moment, with an interpretive reading in the Field-Topology Astrometry framework.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"},
+        "author": {"@id": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/#bala"}
+      },
+      {
+        "@type": "Service",
+        "name": "FTA Ten-Chapter Monograph",
+        "serviceType": "Personal interpretive astrometry monograph",
+        "provider": {"@id": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/#bala"},
+        "offers": {"@type": "Offer", "price": "275", "priceCurrency": "GBP", "url": "https://tally.so/r/ArrMak"}
+      },
+      {
+        "@type": "Person",
+        "@id": "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/#bala",
+        "name": "Bala Danmeri",
+        "url": "https://baladanmeri.com/",
+        "email": "info@baladanmeri.com"
+      }
+    ]
+  }
+  </script>
   <!-- Inline SVG Favicon with River-Stone & Campfire Flame Motifs -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070a0f'/%3E%3Cpath d='M16 4C16 4 24 12 24 19C24 23.4 20.4 27 16 27C11.6 27 8 23.4 8 19C8 12 16 4 16 4Z' fill='%23ff5414'/%3E%3Cpath d='M16 9C16 9 21 14.5 21 19C21 21.8 18.8 24 16 24C13.2 24 11 21.8 11 19C11 14.5 16 9 16 9Z' fill='%23fbb034'/%3E%3Ccircle cx='16' cy='19' r='2.5' fill='%23ffffff'/%3E%3Ccircle cx='24' cy='8' r='1.5' fill='%2338bdf8'/%3E%3C/svg%3E">
   
@@ -273,6 +314,10 @@
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
           Print Monograph
         </button>
+
+        <a href="https://tally.so/r/ArrMak" target="_blank" rel="noopener" class="px-3.5 py-1.5 text-xs font-mono font-bold bg-river-flow hover:bg-river-hyper text-stone-void rounded-lg transition active:scale-95 shadow-river flex items-center gap-1.5">
+          Commission Yours &bull; &pound;275
+        </a>
       </div>
 
     </div>
@@ -451,17 +496,17 @@
               <span class="inline-block w-1.5 h-1.5 rounded-full bg-fire-gold animate-pulse"></span>
               RADIAL INCEPTION TELEMETRY
             </div>
-            <div class="text-river-frost font-bold" id="hudEarthDist">Earth: 1.015 AU (Near Aphelion)</div>
-            <div class="text-stone-muted" id="hudVel">Velocity: 29.29 km/s (Annual Minimum)</div>
-            <div class="text-fire-gold" id="hudMars">Mars: 1.39 AU (Accelerating to Perihelion)</div>
-            <div class="text-fire-blaze font-semibold" id="hudShear">Jupiter-Saturn: 88.4&deg; Quadrupole Shear</div>
+            <div class="text-river-frost font-bold" id="hudEarthDist">Earth: 1.014 AU (Near Aphelion)</div>
+            <div class="text-stone-muted" id="hudVel">Velocity: 29.36 km/s (Near Annual Minimum)</div>
+            <div class="text-fire-gold" id="hudMars">Mars: 1.38 AU (At Perihelion)</div>
+            <div class="text-fire-blaze font-semibold" id="hudShear">Jupiter-Saturn: 138&deg; Heliocentric Span</div>
           </div>
         </div>
 
         <!-- Plain-English Legend Bar -->
         <div class="mt-3.5 pt-3 border-t border-stone-border flex flex-wrap justify-between items-center text-xs text-slate-300 gap-2">
           <p class="text-[11px] text-stone-muted leading-relaxed max-w-xl">
-            <strong class="text-white">Relativistic Orbital Geometry:</strong> Earth is situated at aphelion (maximum distance from Sun), Mars is angled high above the solar invariant plane, and Jupiter and Saturn exert an orthogonal quadrupole shear across the system.
+            <strong class="text-white">Relativistic Orbital Geometry:</strong> Earth is a month past aphelion (its greatest distance from the Sun, reached on 4 July 1973), Mars is at perihelion and sits just below the ecliptic plane, and Jupiter and Saturn are 138&deg; apart as seen from the Sun.
           </p>
           <span class="font-mono text-[10px] text-fire-gold bg-fire-ember/15 px-3 py-1 rounded-lg border border-fire-ember/40 font-semibold flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-fire-gold animate-ping"></span>
@@ -514,7 +559,7 @@
                 Equatorial Horizontal Field Lines (Minna, 9.61&deg; N):
               </span>
               <p class="text-slate-300 text-[11px] mt-1 leading-relaxed">
-                Near the magnetic equator, Earth's field lines run strictly horizontal to the crust (&plusmn;0.8&deg; dip), providing the cleanest, lowest-noise electromagnetic shielding on the planet and establishing an innate low-entropy cognitive baseline.
+                Near the magnetic equator, Earth's field lines run almost horizontal to the ground (about &minus;2.4&deg; dip in 1973, per the IGRF model). In FTA this is read as a low-noise, low-entropy baseline.
               </p>
             </div>
           </div>
@@ -535,10 +580,10 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-fire-ember animate-ping"></span>
                 Gravitational Vector Tensor Field
               </div>
-              <h3 class="font-serif text-base text-white font-bold mt-0.5">Jupiter-Saturn Quadrupole Tensor</h3>
+              <h3 class="font-serif text-base text-white font-bold mt-0.5">Jupiter-Saturn Span</h3>
             </div>
             <span class="text-[10px] font-mono text-fire-gold bg-fire-ash px-2.5 py-0.5 rounded-lg border border-fire-ember/40">
-              Angle: 88.4&deg;
+              Angle: 138&deg;
             </span>
           </div>
 
@@ -548,9 +593,9 @@
           </div>
 
           <div class="p-3 rounded-xl bg-stone-slate/60 border border-stone-border mt-3 text-xs">
-            <span class="font-mono text-fire-gold font-bold block text-[11px]">Orthogonal Gravitational Compression:</span>
+            <span class="font-mono text-fire-gold font-bold block text-[11px]">Oblique Tension (FTA reading):</span>
             <p class="text-slate-300 text-[11px] mt-0.5 leading-relaxed">
-              Jupiter and Saturn sat at right angles relative to the Sun, generating perpendicular gravitational shear lines that encourage deterministic, modular system building rather than loose speculation.
+              Seen from the Sun, Jupiter and Saturn sat about 138&deg; apart: neither aligned nor opposed. FTA reads this unresolved, oblique span as a pull toward deliberate, modular system building rather than loose speculation.
             </p>
           </div>
         </div>
@@ -614,8 +659,11 @@
         <div class="text-xs font-mono text-right text-stone-muted">
           <span class="text-river-frost font-bold block">10 Expansive Chapters</span>
           <span>Archival Commission Reference: FTA-730804-MINNA-2330</span>
+          <a href="https://tally.so/r/ArrMak" target="_blank" rel="noopener" class="mt-2 inline-block px-4 py-2 rounded-lg bg-gradient-to-r from-fire-ember via-fire-blaze to-fire-gold text-stone-void font-bold not-italic">Commission your own monograph &rarr;</a>
+          <a href="mailto:info@baladanmeri.com?subject=FTA%20monograph%20question" class="block mt-1 text-river-frost underline">Questions: info@baladanmeri.com</a>
         </div>
       </div>
+      <p class="text-[11px] text-stone-muted mb-4 leading-relaxed border-l-2 border-fire-ember/60 pl-3"><strong class="text-white">How to read this monograph:</strong> the positions, distances and speeds are astronomy, calculated from published orbital elements. What they are taken to mean for a person (character, timing, working rhythm) is Field-Topology Astrometry: Bala Danmeri's interpretive framework, not established science. The sample below is Bala's own monograph.</p>
 
       <!-- Quick Index Links with Hover Glow -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-[11px] font-mono">
@@ -633,7 +681,7 @@
         </a>
         <a href="#folio-04" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
           <span class="w-1.5 h-1.5 rounded-full bg-river-flow group-hover:animate-ping"></span>
-          04. Quadrupole Shear Dynamics
+          04. Jupiter-Saturn &amp; Mars
         </a>
         <a href="#folio-05" class="p-2.5 rounded-xl bg-stone-slate/60 hover:bg-stone-slate border border-stone-border hover:border-fire-ember/60 text-slate-300 hover:text-white transition truncate flex items-center gap-1.5 group">
           <span class="w-1.5 h-1.5 rounded-full bg-fire-ember group-hover:animate-ping"></span>
@@ -808,19 +856,19 @@
 
       <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
         <p class="text-justify">
-          On 4 August 1973, Earth was located at <strong>1.015 Astronomical Units (AU)</strong> from the center of the Sun, having passed through its annual aphelion (maximum orbital distance) just weeks prior. In classical astrology, distance is ignored; in celestial mechanics and FTA, orbital distance is everything.
+          On 4 August 1973, Earth was located at <strong>1.014 Astronomical Units (AU)</strong> from the center of the Sun, having passed through its annual aphelion (maximum orbital distance) on 4 July, a month earlier. In classical astrology, distance is ignored; in celestial mechanics and FTA, orbital distance is everything.
         </p>
 
         <!-- Technical Telemetry Matrix -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4 font-mono text-center">
           <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
             <div class="text-[9px] text-stone-muted uppercase font-bold">Heliocentric Radius (r)</div>
-            <div class="text-base font-bold text-river-frost print:text-blue-700 mt-0.5">1.015 AU</div>
+            <div class="text-base font-bold text-river-frost print:text-blue-700 mt-0.5">1.014 AU</div>
             <div class="text-[9px] text-stone-muted mt-0.5">151.8 Million km</div>
           </div>
           <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
             <div class="text-[9px] text-stone-muted uppercase font-bold">Orbital Velocity (v)</div>
-            <div class="text-base font-bold text-fire-gold print:text-amber-700 mt-0.5">29.29 km/s</div>
+            <div class="text-base font-bold text-fire-gold print:text-amber-700 mt-0.5">29.36 km/s</div>
             <div class="text-[9px] text-stone-muted mt-0.5">Annual Minimum</div>
           </div>
           <div class="p-3 bg-stone-void border border-stone-border rounded-xl">
@@ -839,7 +887,7 @@
           The Cognitive &amp; Structural Manifestation of Aphelion Velocity
         </h3>
         <p class="text-justify">
-          By Kepler's Second Law of Planetary Motion, an orbiting body sweeps out equal areas in equal times. At aphelion, Earth moves at its <em>minimum orbital speed</em> (29.29 km/s compared to 30.29 km/s at perihelion in January). 
+          By Kepler's Second Law of Planetary Motion, an orbiting body sweeps out equal areas in equal times. At aphelion, Earth moves at its <em>minimum orbital speed</em> (about 29.29 km/s, against 30.29 km/s at perihelion in January). A month later, on 4 August 1973, it was still close to that floor at 29.36 km/s. 
         </p>
         <p class="text-justify">
           In FTA, individuals calibrated to an aphelion inception possess an innate <strong>High Structural Inertia Profile</strong>:
@@ -864,7 +912,7 @@
         <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
           <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
             <span class="text-fire-gold font-bold">FIGURE 2.1 &bull; HELIOCENTRIC ORBITAL VELOCITY TENSOR AT APHELION</span>
-            <span class="text-river-frost">v = 29.29 km/s [MINIMUM ORBITAL ACCELERATION]</span>
+            <span class="text-river-frost">v = 29.36 km/s [NEAR MINIMUM ORBITAL SPEED]</span>
           </div>
           <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[135px]">
             <!-- Orbit Path Ellipse with Animated Dash -->
@@ -884,9 +932,9 @@
               <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
               <!-- Velocity vector arrow -->
               <line x1="0" y1="0" x2="0" y2="-32" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowPulse)"/>
-              <text x="-12" y="-36" fill="#7dd3fc" font-size="8" font-family="monospace" font-weight="bold">v = 29.29 km/s</text>
+              <text x="-12" y="-36" fill="#7dd3fc" font-size="8" font-family="monospace" font-weight="bold">v = 29.36 km/s</text>
             </g>
-            <text x="475" y="100" fill="#7dd3fc" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Aphelion Inception (1.015 AU)</text>
+            <text x="475" y="100" fill="#7dd3fc" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Near-Aphelion Inception (1.014 AU)</text>
             <text x="475" y="112" fill="#94a3b8" font-size="8" font-family="monospace" text-anchor="middle">Maximum Inertia Coordinate</text>
 
             <!-- Perihelion Opposite Point -->
@@ -929,9 +977,9 @@
         <!-- Physics Analysis Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3">
           <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
-            <span class="font-mono text-river-frost font-bold block text-[11px] mb-1">Horizontal Geomagnetic Dip (&plusmn;0.8&deg;)</span>
+            <span class="font-mono text-river-frost font-bold block text-[11px] mb-1">Near-Horizontal Geomagnetic Dip (&minus;2.4&deg;)</span>
             <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
-              At mid-latitudes (such as London or New York), Earth's magnetic lines plunge steeply into the ground at 65&deg; to 75&deg;, channeling energetic particle radiation downward. In Minna, the magnetic inclination is strictly <strong>horizontal</strong> (parallel to Earth's surface). This creates an exceptionally laminar electromagnetic shield with minimal vertical auroral disturbance.
+              At mid-latitudes (such as London or New York), Earth's magnetic lines plunge steeply into the ground at 65&deg; to 75&deg;, channeling energetic particle radiation downward. In Minna, the magnetic inclination was almost <strong>horizontal</strong> in 1973 (about &minus;2.4&deg;, per the IGRF model), lying nearly parallel to Earth's surface. This creates an exceptionally laminar electromagnetic shield with minimal vertical auroral disturbance.
             </p>
           </div>
           <div class="p-4 bg-stone-slate/50 print:bg-slate-50 border border-stone-border rounded-xl">
@@ -1000,33 +1048,36 @@
       </div>
     </article>
 
-    <!-- DOSSIER CHAPTER 4: The Jupiter-Saturn Quadrupole & Mars Perihelion Drive -->
+    <!-- DOSSIER CHAPTER 4: The Jupiter-Saturn Span & Mars at Perihelion -->
     <article id="folio-04" class="print-page bg-stone-abyss/95 print:bg-white border border-stone-border rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
       <div class="border-b-2 border-stone-border pb-4 mb-6">
         <div class="text-[10px] font-mono uppercase tracking-widest text-fire-gold print:text-amber-800 font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-fire-ember animate-ping"></span>
           Tensor Dynamics &bull; Chapter 04/10
         </div>
-        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Jupiter-Saturn Quadrupole Shear &amp; Mars Perihelion Drive</h2>
+        <h2 class="font-serif text-2xl font-bold text-white print:text-slate-900 mt-1">The Jupiter-Saturn Oblique Span &amp; Mars at Perihelion</h2>
       </div>
 
       <div class="space-y-4 text-xs leading-relaxed text-slate-300 print:text-slate-700">
         <p class="text-justify">
-          Two major planetary vector structures defined early August 1973: the <strong>orthogonal quadrupole shear of the outer gas giants</strong> and the <strong>kinetic perihelic approach of Mars</strong>.
+          Two planetary geometries defined early August 1973: the <strong>wide, oblique span between the two gas giants</strong> and <strong>Mars at the closest point of its orbit to the Sun</strong>.
         </p>
 
-        <!-- Quadrupole Explanation -->
+        <!-- Jupiter-Saturn Explanation -->
         <div class="p-4 bg-stone-slate/60 print:bg-slate-50 border border-fire-ember/40 rounded-xl">
           <h4 class="font-serif text-sm font-bold text-white print:text-slate-900 mb-1 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-fire-ember animate-pulse"></span>
-            The 88.4&deg; Quadrupole Gravitational Shear (Jupiter &perp; Saturn)
+            The 138&deg; Jupiter-Saturn Span
           </h4>
           <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
-            In 1973, Jupiter and Saturn sat at right angles relative to the solar center of mass. This geometry forms a <em>gravitational quadrupole tensor</em> across the inner solar system. Rather than planetary energies canceling each other out, they generate perpendicular compressive stresses. In human cognitive architecture, this manifests as:
+            <strong>The astronomy:</strong> on 4 August 1973 Jupiter stood at heliocentric ecliptic longitude 308&deg; and Saturn at 86&deg;, so the two giants were about 138&deg; apart as seen from the Sun. Not a conjunction, not an opposition, not a right angle: an open, oblique span. (Jupiter and Saturn last met in conjunction in 1961 and would meet again in 1981.)
+          </p>
+          <p class="text-stone-muted print:text-slate-600 text-[11px] mt-2 leading-relaxed">
+            <strong>The FTA reading:</strong> an oblique span is tension that never resolves into a single axis. In this framework it shows up as:
           </p>
           <ul class="list-disc pl-5 mt-2 space-y-1 text-stone-muted print:text-slate-600 text-[11px]">
-            <li><strong>Modular Systemic Engineering:</strong> You do not think in linear sentences; you think in orthogonal modular grids&mdash;interlocking frameworks that can withstand high stress.</li>
-            <li><strong>The Demand for Structural Proof:</strong> You have zero patience for ungrounded idealism or wishful thinking; every assertion must demonstrate mechanical integrity.</li>
+            <li><strong>Modular Systemic Engineering:</strong> thinking in interlocking frameworks rather than straight lines, built to hold under uneven load.</li>
+            <li><strong>The Demand for Structural Proof:</strong> little patience for ungrounded idealism; every assertion has to show how it holds together.</li>
           </ul>
         </div>
 
@@ -1034,21 +1085,21 @@
         <div class="p-4 bg-stone-slate/60 print:bg-slate-50 border border-river-flow/40 rounded-xl">
           <h4 class="font-serif text-sm font-bold text-white print:text-slate-900 mb-1 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-river-flow animate-pulse"></span>
-            The High-Inclination Mars Perihelion Vector (1.39 AU)
+            Mars at Perihelion (1.38 AU)
           </h4>
           <p class="text-stone-muted print:text-slate-600 text-[11px] leading-relaxed">
-            While Earth was moving at slow aphelion inertia, Mars was accelerating rapidly toward its closest perihelic approach to the Sun and Earth (culminating in late October 1973). Crucially, Mars was angled high above the solar invariant plane (+1.85&deg;).
+            <strong>The astronomy:</strong> Mars reached perihelion, the nearest point of its orbit to the Sun (about 1.38 AU), in August 1973, the very month of this inception. At perihelion Mars moves at its fastest. It sat about 1.7&deg; below the plane of Earth's orbit. Its opposition, its closest pass to Earth that cycle, followed on 25 October 1973.
           </p>
           <p class="text-stone-muted print:text-slate-600 text-[11px] mt-2 leading-relaxed">
-            This provides the <strong>kinetic spark</strong> to an otherwise quiet, contemplative, and heavy aphelion baseline. Without this Mars perihelion vector, your profile would risk contemplative paralysis (pure indexing with no building). With it, you possess an urgent, decisive drive to materialize blueprints into working physical reality.
+            <strong>The FTA reading:</strong> this is the <strong>kinetic spark</strong> to an otherwise slow, contemplative aphelion baseline. Earth was moving near its slowest while Mars moved at its fastest. Without that contrast the profile would risk contemplative paralysis (pure indexing with no building). With it comes an urgent, decisive drive to turn blueprints into working things.
           </p>
         </div>
 
         <!-- Animated Quadrupole Alien Vector Diagram -->
         <div class="p-4 bg-stone-void rounded-xl border border-stone-border my-4 text-center relative overflow-hidden">
           <div class="flex justify-between items-center mb-1 text-[9px] font-mono text-stone-muted">
-            <span class="text-fire-gold font-bold">FIGURE 4.1 &bull; 88.4&deg; ORTHOGONAL GRAVITATIONAL TENSOR &amp; MARS Z-TILT</span>
-            <span class="text-river-frost">QUADRUPOLE ANGLE = 88.4&deg; &bull; MARS TILT = +1.85&deg;</span>
+            <span class="text-fire-gold font-bold">FIGURE 4.1 &bull; 138&deg; JUPITER-SATURN SPAN &amp; MARS AT PERIHELION</span>
+            <span class="text-river-frost">HELIOCENTRIC SPAN = 138&deg; &bull; MARS LATITUDE = &minus;1.7&deg;</span>
           </div>
           <svg viewBox="0 0 520 140" class="w-full h-auto max-h-[140px]">
             <!-- Crosshair Grid lines -->
@@ -1067,24 +1118,24 @@
               <line x1="0" y1="10" x2="0" y2="36" stroke="#fbb034" stroke-width="2" marker-end="url(#arrowPulse)"/>
             </g>
 
-            <!-- Saturn Mass Vector (Right) with animated shear line -->
-            <g transform="translate(450, 70)">
+            <!-- Saturn Mass Vector at 138 deg from Jupiter -->
+            <g transform="translate(424, 105)">
               <circle cx="0" cy="0" r="9" fill="none" stroke="#ff7a1a" stroke-width="1.5" class="anim-dash"/>
               <circle cx="0" cy="0" r="5" fill="#ff7a1a"/>
               <text x="-10" y="-14" fill="#ff7a1a" font-size="8" font-family="monospace" text-anchor="end">Saturn Vector (5.683 &times; 10²⁶ kg)</text>
-              <line x1="-10" y1="0" x2="-36" y2="0" stroke="#ff7a1a" stroke-width="2" marker-end="url(#arrowPulse)"/>
+              <line x1="-10" y1="-3" x2="-36" y2="-10" stroke="#ff7a1a" stroke-width="2" marker-end="url(#arrowPulse)"/>
             </g>
 
-            <!-- Orthogonal 88.4 deg angle arc indicator -->
-            <path d="M 285 70 A 25 25 0 0 0 260 45" fill="none" stroke="#ff5414" stroke-width="2" class="anim-dash-fast"/>
-            <text x="280" y="55" fill="#ff5414" font-size="8" font-family="monospace" font-weight="bold">88.4&deg;</text>
+            <!-- 138 deg angle arc indicator -->
+            <path d="M 260 45 A 25 25 0 0 1 284 77" fill="none" stroke="#ff5414" stroke-width="2" class="anim-dash-fast"/>
+            <text x="290" y="58" fill="#ff5414" font-size="8" font-family="monospace" font-weight="bold">138&deg;</text>
 
-            <!-- Mars Out-of-Plane Z-Axis Perihelion Arrow (Angled High) -->
-            <g transform="translate(140, 45)">
+            <!-- Mars at perihelion, slightly below the plane -->
+            <g transform="translate(140, 95)">
               <circle cx="0" cy="0" r="7" fill="#ef4444" class="anim-beacon"/>
               <circle cx="0" cy="0" r="3" fill="#ffffff"/>
               <line x1="0" y1="0" x2="45" y2="15" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowPulse)"/>
-              <text x="-10" y="-6" fill="#f87171" font-size="8" font-family="monospace">Mars Perihelion (+1.85&deg; Z-Tilt)</text>
+              <text x="-10" y="-6" fill="#f87171" font-size="8" font-family="monospace">Mars at Perihelion (&minus;1.7&deg; below plane)</text>
             </g>
           </svg>
         </div>
@@ -1181,7 +1232,7 @@
             </div>
             <p class="text-[11px] text-stone-muted print:text-slate-600 leading-relaxed">
               <strong>Trigger:</strong> An isolated, well-defined technical or systemic challenge with clear boundaries.<br>
-              <strong>Cognitive Mechanics:</strong> The Mars perihelion vector and Jupiter-Saturn quadrupole shear engage. You build with relentless, modular discipline. You do not stop until a functional, offline-first, tangible artifact is completed.
+              <strong>Cognitive Mechanics:</strong> The Mars perihelion vector and the Jupiter-Saturn span engage. You build with relentless, modular discipline. You do not stop until a functional, offline-first, tangible artifact is completed.
             </p>
           </div>
 
@@ -1614,11 +1665,11 @@
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left font-mono text-[10px] pt-3 border-t border-stone-border">
             <div>
               <span class="text-stone-muted block">Heliocentric Distance</span>
-              <strong class="text-white">1.015 AU (Aphelion)</strong>
+              <strong class="text-white">1.014 AU (Near Aphelion)</strong>
             </div>
             <div>
               <span class="text-stone-muted block">Geomagnetic Dip</span>
-              <strong class="text-white">&plusmn;0.8&deg; (Horizontal)</strong>
+              <strong class="text-white">&minus;2.4&deg; (Near-horizontal)</strong>
             </div>
             <div>
               <span class="text-stone-muted block">Attractor State</span>
@@ -1640,6 +1691,7 @@
         <div>
           <span>DOCUMENT STATUS: </span>
           <span class="text-river-frost font-bold">ARCHIVAL COMMISSION VERIFIED &bull; &pound;275 MONOGRAPH EDITION</span>
+          <a href="https://tally.so/r/ArrMak" target="_blank" rel="noopener" class="no-print block mt-2 text-fire-gold underline">Commission your own ten-chapter monograph (&pound;275) &rarr;</a>
         </div>
         <span>CHAPTER 10 OF 10 &bull; COMPLETE MASTER DOSSIER</span>
       </div>
@@ -1778,13 +1830,39 @@
       locationName: "Minna, Nigeria",
       lat: 9.61,
       lon: 6.55,
-      heliocentricEarthDistAU: 1.015,
-      earthSpeedKmS: 29.29,
-      marsDistAU: 1.39,
-      shearAngleDeg: 88.4,
+      heliocentricEarthDistAU: 1.014,
+      earthSpeedKmS: 29.36,
+      marsDistAU: 1.38,
+      shearAngleDeg: 138.5,
       attractorState: "State-6",
       invariantShear: 0.682
     };
+
+    // JPL "Keplerian Elements for Approximate Positions of the Major Planets" (Standish), 1800-2050 AD.
+    // [a, a', e, e', I, I', L, L', varpi, varpi', Omega, Omega'] per Julian century from J2000.
+    const KEPLER_ELEMENTS = {
+      earth:   [1.00000261, 0.00000562, 0.01671123, -0.00004392, -0.00001531, -0.01294668, 100.46457166, 35999.37244981, 102.93768193, 0.32327364, 0.0, 0.0],
+      mars:    [1.52371034, 0.00001847, 0.09339410, 0.00007882, 1.84969142, -0.00813131, -4.55343205, 19140.30268499, -23.94362959, 0.44441088, 49.55953891, -0.29257343],
+      jupiter: [5.20288700, -0.00011607, 0.04838624, -0.00013253, 1.30439695, -0.00183714, 34.39644051, 3034.74612775, 14.72847983, 0.21252668, 100.47390909, 0.20469106],
+      saturn:  [9.53667594, -0.00125060, 0.05386179, -0.00050991, 2.48599187, 0.00193609, 49.95424423, 1222.49362201, 92.59887831, -0.41897216, 113.66242448, -0.28867794]
+    };
+    function keplerPosition(body, jd) {
+      const T = (jd - 2451545.0) / 36525;
+      const k = KEPLER_ELEMENTS[body];
+      const d2r = Math.PI / 180;
+      const a = k[0] + k[1] * T, e = k[2] + k[3] * T, I = (k[4] + k[5] * T) * d2r;
+      const L = k[6] + k[7] * T, w = k[8] + k[9] * T, O = k[10] + k[11] * T;
+      const om = (w - O) * d2r, Or = O * d2r;
+      const M = ((((L - w + 180) % 360) + 360) % 360 - 180) * d2r;
+      let E = M + e * Math.sin(M);
+      for (let i = 0; i < 20; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      const x = a * (Math.cos(E) - e), y = a * Math.sqrt(1 - e * e) * Math.sin(E);
+      const X = (Math.cos(om) * Math.cos(Or) - Math.sin(om) * Math.sin(Or) * Math.cos(I)) * x + (-Math.sin(om) * Math.cos(Or) - Math.cos(om) * Math.sin(Or) * Math.cos(I)) * y;
+      const Y = (Math.cos(om) * Math.sin(Or) + Math.sin(om) * Math.cos(Or) * Math.cos(I)) * x + (-Math.sin(om) * Math.sin(Or) + Math.cos(om) * Math.cos(Or) * Math.cos(I)) * y;
+      const Z = (Math.sin(om) * Math.sin(I)) * x + (Math.cos(om) * Math.sin(I)) * y;
+      const r = Math.sqrt(X * X + Y * Y + Z * Z);
+      return { r, lon: ((Math.atan2(Y, X) / d2r) % 360 + 360) % 360, lat: Math.asin(Z / r) / d2r };
+    }
 
     // SEARCH & AUTOCOMPLETE CITIES
     function searchCities(query) {
@@ -1920,10 +1998,28 @@
       const d = new Date(dateStr);
       const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24) || 216;
 
-      // Realistic Heliocentric Keplerian Distance Formula (Aphelion around day 185)
-      const anomaly = ((dayOfYear - 4) / 365.25) * Math.PI * 2;
-      const helioDist = 1.0 - 0.0167 * Math.cos(anomaly); // Earth AU distance variation
-      const orbitalSpeed = 29.78 / Math.sqrt(helioDist); // km/s speed
+      // Heliocentric positions from JPL approximate Keplerian elements (valid 1800-2050)
+      const [hh, mm] = (isUnknownTime ? '12:00' : timeStr).split(':').map(Number);
+      const utcHours = isUnknownTime ? 12 : (hh + mm / 60 - Math.round(lon / 15)); // approx. local mean zone
+      const jd = Date.parse(dateStr + 'T00:00:00Z') / 86400000 + 2440587.5 + utcHours / 24;
+      const earthPos = keplerPosition('earth', jd);
+      const marsPos = keplerPosition('mars', jd);
+      const jupPos = keplerPosition('jupiter', jd);
+      const satPos = keplerPosition('saturn', jd);
+      const helioDist = earthPos.r;
+      const orbitalSpeed = 29.7847 * Math.sqrt(2 / helioDist - 1 / 1.00000261); // vis-viva, km/s
+      let jsSep = Math.abs(jupPos.lon - satPos.lon) % 360;
+      if (jsSep > 180) jsSep = 360 - jsSep;
+      currentProfile.marsDistAU = parseFloat(marsPos.r.toFixed(2));
+      currentProfile.marsLatDeg = parseFloat(marsPos.lat.toFixed(1));
+      currentProfile.shearAngleDeg = parseFloat(jsSep.toFixed(1));
+      const hudMars = document.getElementById('hudMars');
+      if (hudMars) {
+        const marsQ = marsPos.r < 1.42 ? 'Near Perihelion' : (marsPos.r > 1.62 ? 'Near Aphelion' : 'Mid-Orbit');
+        hudMars.textContent = `Mars: ${currentProfile.marsDistAU} AU (${marsQ}, ${currentProfile.marsLatDeg >= 0 ? '+' : ''}${currentProfile.marsLatDeg}\u00B0)`;
+      }
+      const hudShear = document.getElementById('hudShear');
+      if (hudShear) hudShear.textContent = `Jupiter-Saturn: ${currentProfile.shearAngleDeg}\u00B0 Heliocentric Span`;
 
       currentProfile.name = name;
       currentProfile.dateStr = dateStr;
@@ -1938,11 +2034,11 @@
       // Synchronize HUD elements
       const hudEarth = document.getElementById('hudEarthDist');
       if (hudEarth) {
-        hudEarth.textContent = `Earth: ${currentProfile.heliocentricEarthDistAU} AU (${currentProfile.heliocentricEarthDistAU > 1.01 ? 'Near Aphelion' : 'Median Trajectory'})`;
+        hudEarth.textContent = `Earth: ${currentProfile.heliocentricEarthDistAU} AU (${currentProfile.heliocentricEarthDistAU > 1.01 ? 'Near Aphelion' : (currentProfile.heliocentricEarthDistAU < 0.99 ? 'Near Perihelion' : 'Mid-Orbit')})`;
       }
       const hudVel = document.getElementById('hudVel');
       if (hudVel) {
-        hudVel.textContent = `Velocity: ${currentProfile.earthSpeedKmS} km/s (${currentProfile.earthSpeedKmS < 29.5 ? 'Aphelion Minimum' : 'Active Acceleration'})`;
+        hudVel.textContent = `Velocity: ${currentProfile.earthSpeedKmS} km/s (${currentProfile.earthSpeedKmS < 29.5 ? 'Near Annual Minimum' : (currentProfile.earthSpeedKmS > 30.1 ? 'Near Annual Maximum' : 'Mid-Range')})`;
       }
 
       // Synchronize Dossier Chapter Headings
@@ -2092,14 +2188,14 @@
           "geographic_coordinates": {
             "latitude": currentProfile.lat,
             "longitude": currentProfile.lon,
-            "geomagnetic_dip_deg": 0.8
+            "geomagnetic_dip_deg": (Math.abs(currentProfile.lat - 9.61) < 0.05 && Math.abs(currentProfile.lon - 6.55) < 0.05) ? -2.4 : null
           }
         },
         "barycentric_orbital_mechanics": {
           "heliocentric_distance_au": currentProfile.heliocentricEarthDistAU,
           "orbital_velocity_kms": currentProfile.earthSpeedKmS,
-          "mars_perihelion_distance_au": currentProfile.marsDistAU,
-          "jupiter_saturn_quadrupole_deg": currentProfile.shearAngleDeg
+          "mars_heliocentric_distance_au": currentProfile.marsDistAU,
+          "jupiter_saturn_heliocentric_span_deg": currentProfile.shearAngleDeg
         },
         "magnetospheric_shielding": {
           "nocturnal_phase": "Anti-Solar Midnight Quadrant (23:30 WAT)",
@@ -2299,17 +2395,17 @@
 
         ctx.fillStyle = '#7dd3fc';
         ctx.font = '9px monospace';
-        ctx.fillText('Earth (1.015 AU)', earthP.x + 8, earthP.y - 6);
+        ctx.fillText(`Earth (${currentProfile.heliocentricEarthDistAU} AU)`, earthP.x + 8, earthP.y - 6);
 
         // Mars (r = 150, inclination tilt z = -20)
         const marsAng = orbitAngle * 0.53 + 1.2;
-        const marsP = project(Math.cos(marsAng) * 150, -22, Math.sin(marsAng) * 150);
+        const marsP = project(Math.cos(marsAng) * 150, 18, Math.sin(marsAng) * 150);
         ctx.beginPath();
         ctx.arc(marsP.x, marsP.y, 4 * marsP.scale, 0, Math.PI * 2);
         ctx.fillStyle = '#ef4444';
         ctx.fill();
         ctx.fillStyle = '#fca5a5';
-        ctx.fillText('Mars (+1.85° Z)', marsP.x + 8, marsP.y - 6);
+        ctx.fillText(`Mars (${currentProfile.marsDistAU} AU)`, marsP.x + 8, marsP.y - 6);
 
         // Drop line to plane for Mars
         const marsDrop = project(Math.cos(marsAng) * 150, 0, Math.sin(marsAng) * 150);
@@ -2331,8 +2427,8 @@
         ctx.fillStyle = '#fde047';
         ctx.fillText('Jupiter (5.2 AU)', jupP.x + 10, jupP.y - 6);
 
-        // Saturn (r = 250, orthogonal angle ~ 3.94)
-        const satAng = jupAng + Math.PI / 2 * 0.98;
+        // Saturn (r = 250), placed at the computed Jupiter-Saturn span
+        const satAng = jupAng + (currentProfile.shearAngleDeg || 138.5) * Math.PI / 180;
         const satP = project(Math.cos(satAng) * 250, -5, Math.sin(satAng) * 250);
         ctx.beginPath();
         ctx.arc(satP.x, satP.y, 7 * satP.scale, 0, Math.PI * 2);
@@ -2531,11 +2627,14 @@
         ctx.fill();
         ctx.fillText('Jupiter Mass', cx + 8, cy - 62);
 
+        // Saturn placed at the computed heliocentric span from Jupiter
+        const spanRad = (currentProfile.shearAngleDeg || 138.5) * Math.PI / 180;
+        const satX = cx + 65 * Math.sin(spanRad), satY = cy - 65 * Math.cos(spanRad);
         ctx.fillStyle = '#ff7a1a';
         ctx.beginPath();
-        ctx.arc(cx + 85, cy, 5, 0, Math.PI * 2);
+        ctx.arc(satX, satY, 5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillText('Saturn Mass', cx + 45, cy + 18);
+        ctx.fillText('Saturn Mass', satX + 8, satY + 3);
 
         requestAnimationFrame(loop);
       }
