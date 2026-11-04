@@ -9,7 +9,7 @@ import glob, html, json, os, re
 from datetime import datetime, timezone
 from email.utils import format_datetime
 
-BASE = "https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/"
+BASE = "https://fta.noorintelligence.tech/"
 SITE_TITLE = "Field-Topology Astrometry"
 FEED_TITLE = "Field-Topology Astrometry: Blog"
 FEED_DESC = ("Plain guides to the real astronomy of a birth moment, and how Bala Danmeri's "

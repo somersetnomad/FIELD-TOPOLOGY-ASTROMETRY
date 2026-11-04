@@ -1,6 +1,6 @@
 # Organic Engine profile: Field-Topology Astrometry
 
-- Site: https://somersetnomad.github.io/FIELD-TOPOLOGY-ASTROMETRY/ (repo somersetnomad/field-topology-astrometry, GitHub Pages, plain HTML, single index.html)
+- Site: https://fta.noorintelligence.tech/ (repo somersetnomad/field-topology-astrometry, GitHub Pages, plain HTML, single index.html)
 - Owner: Bala Danmeri (Noor Intelligence), Wincanton, Somerset. info@baladanmeri.com
 - Offer: ten-chapter FTA monograph, £275. Order route: Tally form https://tally.so/r/ArrMak (Stripe payment block; Stripe must be connected in Tally).
 - Audience: global, English-speaking; people interested in astrology who want something grounded in real astronomy.
